@@ -1,4 +1,4 @@
-package com.example.covid19notification.ui.dashboard
+package com.example.covid19notification.ui.news
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,20 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.covid19notification.R
 
-class DashboardFragment : Fragment() {
+class NewsFragment : Fragment() {
 
-    private lateinit var dashboardViewModel: DashboardViewModel
+    private lateinit var newsViewModel: NewsViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        dashboardViewModel =
-                ViewModelProviders.of(this).get(DashboardViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
-        val textView: TextView = root.findViewById(R.id.text_dashboard)
-        dashboardViewModel.text.observe(viewLifecycleOwner, Observer {
+        newsViewModel =
+                ViewModelProviders.of(this).get(NewsViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_news, container, false)
+        val textView: TextView = root.findViewById(R.id.text_notifications)
+        newsViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root
