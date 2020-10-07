@@ -22,24 +22,4 @@
         android:name="com.example.covid19notification.ui.news.NewsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_news" />
-    <fragment
-        android:id="@+id/contactResult"
-        android:name="com.example.covid19notification.ui.ContactResult"
-        android:label="contact_result_fragment"
-        tools:layout="@layout/contact_result_fragment" />
-    <fragment
-        android:id="@+id/contactReport"
-        android:name="com.example.covid19notification.ui.ContactReport"
-        android:label="fragment_contact_report"
-        tools:layout="@layout/fragment_contact_report" />
-    <fragment
-        android:id="@+id/symptomsResult"
-        android:name="com.example.covid19notification.ui.SymptomsResult"
-        android:label="symptoms_result_fragment"
-        tools:layout="@layout/symptoms_result_fragment" />
-    <fragment
-        android:id="@+id/symptomsTracker"
-        android:name="com.example.covid19notification.ui.SymptomsTracker"
-        android:label="symptoms_tracker_fragment"
-        tools:layout="@layout/symptoms_tracker_fragment" />
 </navigation>
