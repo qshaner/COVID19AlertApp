@@ -2,6 +2,7 @@ package com.example.covid19notification.ui.Contact
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.covid19notification.R
 import com.example.covid19notification.ui.Contact.ContactActivtiyFragment
 
 class contactActivtiy : AppCompatActivity() {

@@ -2,6 +2,7 @@ package com.example.covid19notification.ui.ui.SymptomTracker
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.covid19notification.R
 import com.example.covid19notification.ui.ui.SymptomTracker.SymptomTrackerFragment
 
 class SymptomTracker : AppCompatActivity() {
