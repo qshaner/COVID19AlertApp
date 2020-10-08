@@ -16,4 +16,7 @@ class SymptomTracker : AppCompatActivity() {
                 .commitNow()
         }
     }
+
+    //If you are logging your symptoms, you probably do not want to restart if your phone gets turned.
 }
+

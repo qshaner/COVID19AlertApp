@@ -9,4 +9,11 @@ class ResourcesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_resources)
     }
+
+
+
+
+
 }
+
+//If you are looking at resources, you will not want to reset if location is changed.
