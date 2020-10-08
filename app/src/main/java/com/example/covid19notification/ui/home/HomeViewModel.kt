@@ -9,5 +9,7 @@ class HomeViewModel : ViewModel() {
     private val _text = MutableLiveData<String>().apply {
         value = "This is the 'landing page' of the app"
     }
+
+    
     val text: LiveData<String> = _text
 }
