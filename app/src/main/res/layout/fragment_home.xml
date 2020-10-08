@@ -25,4 +25,36 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.212" />
 
+    <Button
+        android:id="@+id/button_notify"
+        android:layout_width="187dp"
+        android:layout_height="43dp"
+        android:text="Notify Others"
+        app:layout_constraintBottom_toTopOf="@+id/button_permission"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/text_home"
+        app:layout_constraintVertical_bias="0.566" />
+
+    <Button
+        android:id="@+id/button_permission"
+        android:layout_width="187dp"
+        android:layout_height="39dp"
+        android:layout_marginBottom="48dp"
+        android:text="Update Permissions"
+        app:layout_constraintBottom_toTopOf="@+id/button_symptomTracker"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button_symptomTracker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="224dp"
+        android:text="Track Your Symptoms"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
