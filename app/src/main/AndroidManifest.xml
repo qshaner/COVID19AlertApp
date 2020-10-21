@@ -9,7 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.example.covid19notification.ui.accountregistration.AccountRegistration"></activity>
+        <activity
+            android:name=".ui.SingleFragmentActivity"
+            android:label="@string/title_activity_single_fragment"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".ui.accountregistration.AccountRegistration" />
         <activity android:name=".ui.Contact.contactActivtiy" />
         <activity android:name=".ui.ContactActivity" />
         <activity android:name=".ui.ui.SymptomTracker.SymptomTracker" />

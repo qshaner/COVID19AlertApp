@@ -2,16 +2,14 @@ package com.example.covid19notification.ui.accountregistration
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import com.example.covid19notification.R
+import com.example.covid19notification.ui.SingleFragmentActivity
 
-class AccountRegistration : AppCompatActivity() {
+class AccountRegistration : SingleFragmentActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.account_registration_activity)
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, AccountRegistrationFragment.newInstance())
-                .commitNow()
-        }
+        override fun createFragment(): Fragment {
+        return AccountRegistrationFragment()
     }
+
 }
