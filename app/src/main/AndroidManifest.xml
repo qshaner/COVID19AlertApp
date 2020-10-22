@@ -9,10 +9,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ui.login.Login"></activity>
         <activity
             android:name=".ui.SingleFragmentActivity"
             android:label="@string/title_activity_single_fragment"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.accountregistration.AccountRegistration">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,9 +29,7 @@
         <activity android:name=".ui.home.DashboardOptions" />
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name">
-
-        </activity>
+            android:label="@string/app_name"></activity>
     </application>
 
 </manifest>
