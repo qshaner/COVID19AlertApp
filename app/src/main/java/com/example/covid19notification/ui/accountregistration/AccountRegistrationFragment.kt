@@ -1,7 +1,6 @@
 package com.example.covid19notification.ui.accountregistration
 
 import android.content.Intent
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,15 +11,20 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.example.covid19notification.MainActivity
+import com.example.covid19notification.Model.User
 import com.example.covid19notification.R
-import com.example.covid19notification.ui.Contact.contactActivtiy
-import com.example.covid19notification.ui.ui.SymptomTracker.SymptomTracker
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
+import java.util.*
 
 class AccountRegistrationFragment  : Fragment(), View.OnClickListener {
     private lateinit var mEtUsername: EditText
     private lateinit var mEtPassword: EditText
     private lateinit var mEtEmail: EditText
     private lateinit var mEtAddress: EditText
+    private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
 
     companion object {
         fun newInstance() = AccountRegistrationFragment()
@@ -37,7 +41,8 @@ class AccountRegistrationFragment  : Fragment(), View.OnClickListener {
         mEtPassword = v.findViewById(R.id.accountRegPass)
         mEtEmail = v.findViewById(R.id.accountRegEmail)
         mEtAddress = v.findViewById(R.id.accountRegLocation)
-
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
         val btnConfirm: Button = v.findViewById(R.id.buttonAccount)
         btnConfirm.setOnClickListener(this)
 
@@ -58,21 +63,27 @@ class AccountRegistrationFragment  : Fragment(), View.OnClickListener {
         val activity = requireActivity()
         val tag = "AccountRegistration"
 
-        //make sure that user, password, and email are non-empty
-        //address can be empty
-        if(username != "" && password != "" && email !=""){
-            //TODO: Hook in database here
-            //Check against database
-            //if check succeeds, create account and go to login page
-            startActivity(Intent(activity.applicationContext, MainActivity::class.java))
-            //TODO: Change this to be the login page instead of the main activity
-
-            //if check fails, show error
-        } else if (username == "" || password == "" || email == "") {
-            Toast.makeText(activity.applicationContext, "Missing entry", Toast.LENGTH_SHORT).show()
-        }else {
-            Log.d(tag, "There was an error in creating the account")
+    auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener{task ->
+        if (task.isSuccessful) {
+            val id = auth.currentUser!!.uid
+            val user = User(id, email, username, address)
+            val document = db.collection("users").document(id)
+            document.set(user).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    Toast.makeText(activity.applicationContext, "Successfully created account", Toast.LENGTH_SHORT).show()
+                    Log.d("ACCOUNT_CREATION", "Account successfully created and added to db")
+                    startActivity(Intent(activity.applicationContext, MainActivity::class.java))
+                } else {
+                    Log.e("addUser:failure", it.exception.toString())
+                    Toast.makeText(activity.applicationContext, "Could not add user to database", Toast.LENGTH_SHORT).show()
+                }
+            }
+        } else {
+            Log.e("createUser:failure", task.exception.toString());
+            Toast.makeText(activity.applicationContext, "Registration Failed", Toast.LENGTH_SHORT).show()
         }
+    }
+
     }
 
 }
