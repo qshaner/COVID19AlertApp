@@ -14,6 +14,8 @@ import android.widget.Toast
 import com.example.covid19notification.MainActivity
 import com.example.covid19notification.R
 import com.example.covid19notification.ui.Contact.contactActivtiy
+import com.example.covid19notification.ui.accountDetails.accountDetails
+import com.example.covid19notification.ui.login.Login
 import com.example.covid19notification.ui.ui.SymptomTracker.SymptomTracker
 
 class AccountRegistrationFragment  : Fragment(), View.OnClickListener {
@@ -41,12 +43,17 @@ class AccountRegistrationFragment  : Fragment(), View.OnClickListener {
         val btnConfirm: Button = v.findViewById(R.id.buttonAccount)
         btnConfirm.setOnClickListener(this)
 
+        val btnLogin: Button = v.findViewById(R.id.buttonLogin)
+        btnLogin.setOnClickListener(this)
+
         return v
     }
 
     override fun onClick(v: View) {
+        val activity = requireActivity()
         when (v.id) {
             R.id.buttonAccount -> createAccount();
+            R.id.buttonLogin -> startActivity(Intent(activity.applicationContext, Login::class.java))
         }
     }
 
@@ -61,12 +68,10 @@ class AccountRegistrationFragment  : Fragment(), View.OnClickListener {
         //make sure that user, password, and email are non-empty
         //address can be empty
         if(username != "" && password != "" && email !=""){
-            //TODO: Hook in database here
+            //TODO: Hook in database here to A) Check if this is an existing account and B) Add to database
             //Check against database
             //if check succeeds, create account and go to login page
-            startActivity(Intent(activity.applicationContext, MainActivity::class.java))
-            //TODO: Change this to be the login page instead of the main activity
-
+            startActivity(Intent(activity.applicationContext, Login::class.java))
             //if check fails, show error
         } else if (username == "" || password == "" || email == "") {
             Toast.makeText(activity.applicationContext, "Missing entry", Toast.LENGTH_SHORT).show()
