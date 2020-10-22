@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.covid19notification.R
 import com.example.covid19notification.ui.Contact.contactActivtiy
+import com.example.covid19notification.ui.accountDetails.accountDetails
 import com.example.covid19notification.ui.ui.SymptomTracker.SymptomTracker
 
 class HomeFragment : Fragment(), View.OnClickListener {
@@ -37,6 +38,8 @@ class HomeFragment : Fragment(), View.OnClickListener {
         btnNotify.setOnClickListener(this)
         val btnSymptomTracker: Button = root.findViewById(R.id.button_symptomTracker)
         btnSymptomTracker.setOnClickListener(this)
+        val btnAccount: Button = root.findViewById(R.id.button_account_details)
+        btnAccount.setOnClickListener(this)
         return root
     }
 
@@ -45,6 +48,7 @@ class HomeFragment : Fragment(), View.OnClickListener {
         when(v.id){
             R.id.button_notify -> startActivity(Intent(activity.applicationContext, contactActivtiy::class.java))
             R.id.button_symptomTracker -> startActivity(Intent(activity.applicationContext, SymptomTracker::class.java))
+            R.id.button_account_details -> startActivity(Intent(activity.applicationContext, accountDetails::class.java))
             //permission button here as well
         }
     }
