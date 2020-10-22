@@ -17,6 +17,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
+import com.example.covid19notification.ui.Contact.contactActivtiy
+import com.example.covid19notification.ui.accountDetails.accountDetails
+import com.example.covid19notification.ui.login.Login
+import com.example.covid19notification.ui.ui.SymptomTracker.SymptomTracker
 
 class AccountRegistrationFragment  : Fragment(), View.OnClickListener {
     private lateinit var mEtUsername: EditText
@@ -46,12 +50,19 @@ class AccountRegistrationFragment  : Fragment(), View.OnClickListener {
         val btnConfirm: Button = v.findViewById(R.id.buttonAccount)
         btnConfirm.setOnClickListener(this)
 
+        val btnLogin: Button = v.findViewById(R.id.buttonLogin)
+        btnLogin.setOnClickListener(this)
+
         return v
     }
 
     override fun onClick(v: View) {
+        val activity = requireActivity()
         when (v.id) {
             R.id.buttonAccount -> createAccount();
+            R.id.buttonLogin -> {startActivity(Intent(activity.applicationContext, Login::class.java))
+            activity.finish()
+            }
         }
     }
 
