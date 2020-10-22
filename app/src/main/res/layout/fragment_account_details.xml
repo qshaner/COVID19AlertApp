@@ -69,7 +69,7 @@
         app:layout_constraintVertical_bias="0.473" />
 
     <TextView
-        android:id="@+id/accountViewNameData"
+        android:id="@+id/accountDetailNameData"
         android:layout_width="194dp"
         android:layout_height="26dp"
         android:layout_marginTop="76dp"
@@ -77,7 +77,7 @@
         android:textAlignment="center"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.457"
+        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toEndOf="@+id/accountDetName"
         app:layout_constraintTop_toTopOf="@+id/textView" />
 
@@ -88,15 +88,15 @@
         android:text="DATA"
         android:textAlignment="center"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/AccountDetailAddressData"
+        app:layout_constraintBottom_toTopOf="@+id/AaccountDetailAddressData"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.366"
         app:layout_constraintStart_toEndOf="@+id/accountDetEmail"
-        app:layout_constraintTop_toBottomOf="@+id/accountViewNameData"
+        app:layout_constraintTop_toBottomOf="@+id/accountDetailNameData"
         app:layout_constraintVertical_bias="0.407" />
 
     <TextView
-        android:id="@+id/AccountDetailAddressData"
+        android:id="@+id/AaccountDetailAddressData"
         android:layout_width="196dp"
         android:layout_height="21dp"
         android:layout_marginBottom="468dp"

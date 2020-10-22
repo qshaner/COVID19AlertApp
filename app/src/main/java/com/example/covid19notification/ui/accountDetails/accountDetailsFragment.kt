@@ -1,27 +1,23 @@
 package com.example.covid19notification.ui.accountDetails
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
-import com.example.covid19notification.MainActivity
+import androidx.appcompat.widget.AppCompatTextView
 import com.example.covid19notification.R
-import com.example.covid19notification.ui.ui.SymptomTracker.SymptomTrackerFragment
 
 
 class accountDetailsFragment : Fragment(), View.OnClickListener {
     companion object {
-        fun newInstance() = SymptomTrackerFragment()
+        fun newInstance() = accountDetailsFragment()
     }
-    private lateinit var mEtUsername: EditText
-    private lateinit var mEtEmail: EditText
-    private lateinit var mEtAddress: EditText
+    private lateinit var mEtUsername: AppCompatTextView
+    private lateinit var mEtEmail: AppCompatTextView
+    private lateinit var mEtAddress: AppCompatTextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,9 +25,9 @@ class accountDetailsFragment : Fragment(), View.OnClickListener {
     ): View? {
         // Inflate the layout for this fragment
         val v = inflater.inflate(R.layout.fragment_account_details, container, false)
-        mEtUsername = v.findViewById(R.id.accountDetName)
-        mEtEmail = v.findViewById(R.id.accountDetEmail)
-        mEtAddress = v.findViewById(R.id.accountDetAddress)
+        mEtUsername = v.findViewById(R.id.accountDetailNameData)
+        mEtEmail = v.findViewById(R.id.AccountDetailEmailData)
+        mEtAddress = v.findViewById(R.id.AccountDetailEmailData)
 
         val btnDeleteAccount: Button = v.findViewById(R.id.accountDetDelete)
         btnDeleteAccount.setOnClickListener(this)
@@ -49,9 +45,9 @@ class accountDetailsFragment : Fragment(), View.OnClickListener {
         val username = getCurrentUser()
         val email = getEmailFromDatabase()
         val address = getAddressFromDatabase()
-        mEtUsername.setText(username.toString());
-        mEtEmail.setText(email.toString());
-        mEtAddress.setText(address.toString())
+        mEtUsername.text =(username.toString());
+        mEtEmail.text =(email.toString());
+        mEtAddress.text = address.toString()
         val activity = requireActivity()
     }
 

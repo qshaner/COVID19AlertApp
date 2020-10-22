@@ -53,7 +53,9 @@ class AccountRegistrationFragment  : Fragment(), View.OnClickListener {
         val activity = requireActivity()
         when (v.id) {
             R.id.buttonAccount -> createAccount();
-            R.id.buttonLogin -> startActivity(Intent(activity.applicationContext, Login::class.java))
+            R.id.buttonLogin -> {startActivity(Intent(activity.applicationContext, Login::class.java))
+            activity.finish()
+            }
         }
     }
 
@@ -71,7 +73,8 @@ class AccountRegistrationFragment  : Fragment(), View.OnClickListener {
             //TODO: Hook in database here to A) Check if this is an existing account and B) Add to database
             //Check against database
             //if check succeeds, create account and go to login page
-            startActivity(Intent(activity.applicationContext, Login::class.java))
+            startActivity(Intent(activity.applicationContext, MainActivity::class.java))
+            activity.finish();
             //if check fails, show error
         } else if (username == "" || password == "" || email == "") {
             Toast.makeText(activity.applicationContext, "Missing entry", Toast.LENGTH_SHORT).show()
