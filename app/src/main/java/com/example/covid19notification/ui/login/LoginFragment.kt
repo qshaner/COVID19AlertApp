@@ -8,8 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import com.example.covid19notification.MainActivity
 import com.example.covid19notification.R
 import com.example.covid19notification.ui.accountregistration.AccountRegistration
+import com.example.covid19notification.ui.home.DashboardOptions
 
 
 /**
@@ -43,7 +45,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View) {
         val activity = requireActivity()
         when (v.id) {
-            R.id.login -> login();
+            R.id.login -> login(v);
             R.id.signup -> startActivity(
                 Intent(
                     activity.applicationContext,
@@ -53,13 +55,21 @@ class LoginFragment : Fragment(), View.OnClickListener {
         }
     }
 
-        private fun login(){
+        private fun login(v: View):Boolean{
+            val activity = requireActivity()
             val username = mEtUsername.text.toString()
             val password = mEtPassword.text.toString()
             //check the input against hte database
             //if yes, move on
             //if no, stay here
+            when(v.id){
+               R.id.login -> {
+                   startActivity(Intent(activity.applicationContext, DashboardOptions::class.java))
+                   return true
+               }
+            }
 
+            return false;
             //TODO: Set up database connection to check for user and password
 
         }
