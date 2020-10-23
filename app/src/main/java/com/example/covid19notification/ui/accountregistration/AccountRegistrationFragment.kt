@@ -75,7 +75,7 @@ class AccountRegistrationFragment  : Fragment(), View.OnClickListener {
                 Database.addToDatabase("users", id, user).addOnCompleteListener {
                     if (it.isSuccessful) {
                         Toast.makeText(activity.applicationContext, "Successfully created account", Toast.LENGTH_SHORT).show()
-                        Log.d(Tags.ACCOUNT_CREATED_SUCCESS, "Account successfully created and added to db")
+                        Log.d(Tags.REGISTRATION_SUCCESS, "Account successfully created and added to db")
                         startActivity(Intent(activity.applicationContext, MainActivity::class.java))
                     } else {
                         Log.e(Tags.DB_ADD_USER_ERROR, it.exception.toString())
@@ -83,7 +83,7 @@ class AccountRegistrationFragment  : Fragment(), View.OnClickListener {
                     }
                 }
             } else {
-                Log.e(Tags.ACCOUNT_CREATED_FAILURE, task.exception.toString());
+                Log.e(Tags.REGISTTRATION_FAILED, task.exception.toString());
                 Toast.makeText(activity.applicationContext, "Registration Failed", Toast.LENGTH_SHORT).show()
             }
         }

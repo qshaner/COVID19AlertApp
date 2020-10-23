@@ -2,17 +2,21 @@ package com.example.covid19notification.ui.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.covid19notification.Helpers.Tags
 import com.example.covid19notification.MainActivity
 import com.example.covid19notification.R
 import com.example.covid19notification.ui.accountregistration.AccountRegistration
 import com.example.covid19notification.ui.home.DashboardOptions
+import com.google.firebase.auth.FirebaseAuth
 
 
 /**
@@ -58,22 +62,24 @@ class LoginFragment : Fragment(), View.OnClickListener {
         }
     }
 
-        private fun checkLogin(v: View):Boolean{
-            val activity = requireActivity() as AppCompatActivity
+        private fun checkLogin(v: View) {
+            val activity = requireActivity()
             val username = mEtUsername.text.toString()
             val password = mEtPassword.text.toString()
-            //check the input against hte database
-            //if yes, move on
-            //if no, stay here
 
-            startActivity(Intent(activity.applicationContext, MainActivity::class.java))
+            val auth = FirebaseAuth.getInstance()
+            auth.signInWithEmailAndPassword(username, password).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    Log.i(Tags.USER_LOGIN_SUCCESS, "User successfully logged in")
+                    startActivity(Intent(activity.applicationContext, MainActivity::class.java))
                     activity.finish()
-                   return true
+                } else {
+                    Log.e(Tags.USER_LOGIN_FAILED, it.exception.toString())
+                    Toast.makeText(activity.applicationContext, "Error occurred when trying to login", Toast.LENGTH_SHORT).show()
+                }
+            }
 
 
-
-            return false;
-            //TODO: Set up database connection to check for user and password
 
         }
     }
