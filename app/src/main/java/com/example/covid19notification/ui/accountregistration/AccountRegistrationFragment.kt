@@ -10,17 +10,14 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.example.covid19notification.Database.Database
+import com.example.covid19notification.Helpers.Tags
 import com.example.covid19notification.MainActivity
 import com.example.covid19notification.Model.User
 import com.example.covid19notification.R
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
-import java.util.*
-import com.example.covid19notification.ui.Contact.contactActivtiy
-import com.example.covid19notification.ui.accountDetails.accountDetails
 import com.example.covid19notification.ui.login.Login
-import com.example.covid19notification.ui.ui.SymptomTracker.SymptomTracker
 
 class AccountRegistrationFragment  : Fragment(), View.OnClickListener {
     private lateinit var mEtUsername: EditText
@@ -33,8 +30,6 @@ class AccountRegistrationFragment  : Fragment(), View.OnClickListener {
     companion object {
         fun newInstance() = AccountRegistrationFragment()
     }
-
-    //private lateinit var accountRegistrationViewModel: AccountRegistrationViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,29 +67,26 @@ class AccountRegistrationFragment  : Fragment(), View.OnClickListener {
         val email = mEtEmail.text.toString()
         val address = mEtAddress.text.toString()
         val activity = requireActivity()
-        val tag = "AccountRegistration"
 
-    auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener{task ->
-        if (task.isSuccessful) {
-            val id = auth.currentUser!!.uid
-            val user = User(id, email, username, address)
-            val document = db.collection("users").document(id)
-            document.set(user).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    Toast.makeText(activity.applicationContext, "Successfully created account", Toast.LENGTH_SHORT).show()
-                    Log.d("ACCOUNT_CREATION", "Account successfully created and added to db")
-                    startActivity(Intent(activity.applicationContext, MainActivity::class.java))
-                } else {
-                    Log.e("addUser:failure", it.exception.toString())
-                    Toast.makeText(activity.applicationContext, "Could not add user to database", Toast.LENGTH_SHORT).show()
+        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener{task ->
+            if (task.isSuccessful) {
+                val id = auth.currentUser!!.uid
+                val user = User(id, email, username, address)
+                Database.addToDatabase("users", id, user).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        Toast.makeText(activity.applicationContext, "Successfully created account", Toast.LENGTH_SHORT).show()
+                        Log.d(Tags.ACCOUNT_CREATED_SUCCESS, "Account successfully created and added to db")
+                        startActivity(Intent(activity.applicationContext, MainActivity::class.java))
+                    } else {
+                        Log.e(Tags.DB_ADD_USER_ERROR, it.exception.toString())
+                        Toast.makeText(activity.applicationContext, "Could not add user to database", Toast.LENGTH_SHORT).show()
+                    }
                 }
+            } else {
+                Log.e(Tags.ACCOUNT_CREATED_FAILURE, task.exception.toString());
+                Toast.makeText(activity.applicationContext, "Registration Failed", Toast.LENGTH_SHORT).show()
             }
-        } else {
-            Log.e("createUser:failure", task.exception.toString());
-            Toast.makeText(activity.applicationContext, "Registration Failed", Toast.LENGTH_SHORT).show()
         }
-    }
-
     }
 
 }
