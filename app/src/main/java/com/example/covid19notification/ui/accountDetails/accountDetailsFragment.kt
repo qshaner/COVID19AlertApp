@@ -8,7 +8,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.widget.AppCompatTextView
+import com.example.covid19notification.Database.Database
 import com.example.covid19notification.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 class accountDetailsFragment : Fragment(), View.OnClickListener {
@@ -18,6 +22,8 @@ class accountDetailsFragment : Fragment(), View.OnClickListener {
     private lateinit var mEtUsername: AppCompatTextView
     private lateinit var mEtEmail: AppCompatTextView
     private lateinit var mEtAddress: AppCompatTextView
+    private lateinit var auth: FirebaseAuth
+    private lateinit var db: FirebaseFirestore
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,10 +34,12 @@ class accountDetailsFragment : Fragment(), View.OnClickListener {
         mEtUsername = v.findViewById(R.id.accountDetailNameData)
         mEtEmail = v.findViewById(R.id.AccountDetailEmailData)
         mEtAddress = v.findViewById(R.id.AccountDetailEmailData)
+        db = FirebaseFirestore.getInstance()
 
         val btnDeleteAccount: Button = v.findViewById(R.id.accountDetDelete)
         btnDeleteAccount.setOnClickListener(this)
         getAndSetAccountDetails();
+
         return v;
     }
 
@@ -51,17 +59,25 @@ class accountDetailsFragment : Fragment(), View.OnClickListener {
         val activity = requireActivity()
     }
 
-    private fun getCurrentUser(){
-        //TODO: Hook in database
+    private fun getCurrentUser(): String? {
+        return auth.currentUser!!.displayName;
     }
 
-    private fun getEmailFromDatabase(){
-        //TODO: Hook in database
+    private fun getEmailFromDatabase(): String? {
+        return auth.currentUser!!.email;
         //TODO: Can make this editable with confirm button?
     }
 
     private fun getAddressFromDatabase(){
         //TODO: Hook in database
+        var userID = auth.currentUser!!.uid.toString();
+        var docRef = db.collection("users").document(userID)
+        docRef.get().addOnSuccessListener { result ->
+           result.data!!["address"]
+            //This should get the address of the user with the specific id
+        }
+       }
+
     }
 
     private fun deleteAccount(){

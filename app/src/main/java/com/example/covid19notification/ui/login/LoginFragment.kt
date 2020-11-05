@@ -78,8 +78,5 @@ class LoginFragment : Fragment(), View.OnClickListener {
                     Toast.makeText(activity.applicationContext, "Error occurred when trying to login", Toast.LENGTH_SHORT).show()
                 }
             }
-
-
-
         }
     }
