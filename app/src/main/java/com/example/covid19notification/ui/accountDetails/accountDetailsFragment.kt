@@ -68,17 +68,20 @@ class accountDetailsFragment : Fragment(), View.OnClickListener {
         //TODO: Can make this editable with confirm button?
     }
 
-    private fun getAddressFromDatabase(){
-        //TODO: Hook in database
+    private fun getAddressFromDatabase(): String {
+        //TODO: Check this works
         var userID = auth.currentUser!!.uid.toString();
+        var address = "";
         var docRef = db.collection("users").document(userID)
         docRef.get().addOnSuccessListener { result ->
-           result.data!!["address"]
+          address = result.data!!["address"].toString()
             //This should get the address of the user with the specific id
         }
+        return address;
        }
 
-    }
+    //TODO: add in an update button and onClick, update the value for the current user in the DB
+    private fun updateAddress(){}
 
     private fun deleteAccount(){
         //TODO: Hook in database
