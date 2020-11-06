@@ -1,5 +1,6 @@
 package com.example.covid19notification.ui.accountDetails
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,7 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import com.example.covid19notification.R
+import com.example.covid19notification.ui.login.Login
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -57,7 +60,6 @@ class accountDetailsFragment : Fragment(), View.OnClickListener {
         getEmailFromDatabase()
         getCurrentUser()
         getAddressFromDatabase()
-        val activity = requireActivity()
     }
 
     private fun getCurrentUser() {
@@ -99,44 +101,54 @@ class accountDetailsFragment : Fragment(), View.OnClickListener {
         }
      }
 
-    private fun updateAccountDetails(){
-        //TODO: Test this
+    private fun updateAccountDetails() {
+        val activity = requireActivity()
         var addressData = mEtAddress.text.toString();
         var emailData = mEtEmail.text.toString();
         var usernameData = mEtUsername.text.toString();
 
-        if(emailData == ""){
-            //TODO: Make the toast
-            //Make a toast that says 'You can't do this!'
-        }
-        else {
-            auth.currentUser!!.updateEmail((emailData))
-                //TODO: Add success listener
-                //check if this succeeded or nah
+        if (emailData != "") {
+            auth.currentUser!!.updateEmail((emailData)).addOnCompleteListener() { result ->
+                if (result.isSuccessful()) {
+                    Toast.makeText(
+                        activity.applicationContext,
+                        "Successfully Updated Email",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        activity.applicationContext,
+                        "Error Updating Email",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
         }
         //update address and username with users
 
         db.collection("users").document(userID).get().addOnSuccessListener { result ->
             //we don't want to set the email/username to blank if we can avoid it
-            if(addressData == "N/A"){
-                db.collection("users").document(userID).get().addOnSuccessListener { result ->
-                    addressData = result.data!!["address"].toString()};
-            }
-            if(usernameData == ""){
-                db.collection("users").document(userID).get().addOnSuccessListener { result ->
-                    usernameData = result.data!!["username"].toString()};
-            }
-            if(emailData == ""){
-                db.collection("users").document(userID).get().addOnSuccessListener { result ->
-                    emailData = result.data!!["email"].toString()};
-            }
-                result.data!!["address"] = addressData;
-                result.data!!["username"] = usernameData;
-                result.data!!["email"] = emailData
-            }
+            if (addressData == "N/A") {
+                    addressData = result.data!!["address"].toString()
+                };
+            if (usernameData == "") {
+                    usernameData = result.data!!["username"].toString()
+                };
+            if (emailData == "") {
+                    emailData = result.data!!["email"].toString()
+                };
+
+
+          var ref =  db.collection("users").document(userID);
+            ref.update("address", addressData)
+            ref.update("username", usernameData)
+            ref.update("email", emailData)
         }
+    }
 
     private fun deleteAccount(){
+        val activity = requireActivity()
+
         auth.currentUser!!.delete();
         db.collection("users").document(userID).delete()
 
@@ -144,5 +156,14 @@ class accountDetailsFragment : Fragment(), View.OnClickListener {
             "dbDeleteAccount",
             "UserAccount and Auth record: "+userID + " has been deleted"
         )
+
+        Toast.makeText(
+            activity.applicationContext,
+            "Successfully Deleted Account",
+            Toast.LENGTH_SHORT
+        ).show()
+
+        startActivity(Intent(activity.applicationContext, Login::class.java))
+        activity.finish();
     }
 }

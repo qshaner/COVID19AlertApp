@@ -126,10 +126,12 @@
         android:id="@+id/ButtonAccountDataUpdate"
         android:layout_width="186dp"
         android:layout_height="50dp"
+        android:layout_marginStart="210dp"
         android:text="Submit Changes"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/accountDetDelete"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.572"
-        tools:layout_editor_absoluteX="188dp" />
+        app:layout_constraintVertical_bias="0.572" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
