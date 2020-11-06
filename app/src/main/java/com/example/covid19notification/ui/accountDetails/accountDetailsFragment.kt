@@ -37,7 +37,8 @@ class accountDetailsFragment : Fragment(), View.OnClickListener {
         auth = FirebaseAuth.getInstance()
         userID = auth.currentUser!!.uid.toString();
 
-
+        val submitAccountDetails: Button = v.findViewById(R.id.ButtonAccountDataUpdate)
+        submitAccountDetails.setOnClickListener(this);
         val btnDeleteAccount: Button = v.findViewById(R.id.accountDetDelete)
         btnDeleteAccount.setOnClickListener(this)
         getAndSetAccountDetails();
@@ -48,6 +49,7 @@ class accountDetailsFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View) {
         when (v.id) {
             R.id.accountDetDelete -> deleteAccount();
+            R.id.ButtonAccountDataUpdate -> updateAccountDetails();
         }
     }
 
@@ -71,7 +73,6 @@ class accountDetailsFragment : Fragment(), View.OnClickListener {
     }
 
     private fun getEmailFromDatabase() {
-      //  return auth.currentUser!!.email;
         var email = "";
         db.collection("users").document(userID).get().addOnSuccessListener { result ->
             email = result.data!!["email"].toString();
@@ -98,13 +99,50 @@ class accountDetailsFragment : Fragment(), View.OnClickListener {
         }
      }
 
-    //TODO: add in an update button and onClick, update the value for the current user in the DB
-    private fun updateAddress(){}
+    private fun updateAccountDetails(){
+        //TODO: Test this
+        var addressData = mEtAddress.text.toString();
+        var emailData = mEtEmail.text.toString();
+        var usernameData = mEtUsername.text.toString();
 
-    //TODO: Add in update button and textbox thing
-    private fun updateEmail(){}
+        if(emailData == ""){
+            //TODO: Make the toast
+            //Make a toast that says 'You can't do this!'
+        }
+        else {
+            auth.currentUser!!.updateEmail((emailData))
+                //TODO: Add success listener
+                //check if this succeeded or nah
+        }
+        //update address and username with users
+
+        db.collection("users").document(userID).get().addOnSuccessListener { result ->
+            //we don't want to set the email/username to blank if we can avoid it
+            if(addressData == "N/A"){
+                db.collection("users").document(userID).get().addOnSuccessListener { result ->
+                    addressData = result.data!!["address"].toString()};
+            }
+            if(usernameData == ""){
+                db.collection("users").document(userID).get().addOnSuccessListener { result ->
+                    usernameData = result.data!!["username"].toString()};
+            }
+            if(emailData == ""){
+                db.collection("users").document(userID).get().addOnSuccessListener { result ->
+                    emailData = result.data!!["email"].toString()};
+            }
+                result.data!!["address"] = addressData;
+                result.data!!["username"] = usernameData;
+                result.data!!["email"] = emailData
+            }
+        }
 
     private fun deleteAccount(){
-        //TODO: Hook in database
+        auth.currentUser!!.delete();
+        db.collection("users").document(userID).delete()
+
+        Log.d(
+            "dbDeleteAccount",
+            "UserAccount and Auth record: "+userID + " has been deleted"
+        )
     }
 }
