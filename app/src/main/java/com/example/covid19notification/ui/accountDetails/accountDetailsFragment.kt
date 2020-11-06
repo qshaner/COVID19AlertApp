@@ -8,11 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import androidx.appcompat.widget.AppCompatTextView
-import com.example.covid19notification.Database.Database
 import com.example.covid19notification.R
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 
 
@@ -20,9 +17,9 @@ class accountDetailsFragment : Fragment(), View.OnClickListener {
     companion object {
         fun newInstance() = accountDetailsFragment()
     }
-    private lateinit var mEtUsername: AppCompatTextView
-    private lateinit var mEtEmail: AppCompatTextView
-    private lateinit var mEtAddress: AppCompatTextView
+    private lateinit var mEtUsername: EditText
+    private lateinit var mEtEmail: EditText
+    private lateinit var mEtAddress: EditText
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
     private lateinit var userID: String
@@ -69,7 +66,7 @@ class accountDetailsFragment : Fragment(), View.OnClickListener {
                     "dbAccess",
                     "/n CurrentUser called. ->" + username + "<- Username should be printed"
                 )
-            mEtUsername.text = username
+            mEtUsername.setText(username);
         }
     }
 
@@ -82,7 +79,7 @@ class accountDetailsFragment : Fragment(), View.OnClickListener {
                 "dbAccess",
                 "/n CurrentUser called. ->" + email + "<- email should be printed"
             )
-            mEtEmail.text = email;
+            mEtEmail.setText(email);
         }
     }
 
@@ -97,7 +94,7 @@ class accountDetailsFragment : Fragment(), View.OnClickListener {
             if(address==""){
                 address = "N/A"
             }
-            mEtAddress.text = address;
+            mEtAddress.setText(address);
         }
      }
 
