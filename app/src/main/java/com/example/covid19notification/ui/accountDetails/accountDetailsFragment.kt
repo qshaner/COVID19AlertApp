@@ -1,6 +1,7 @@
 package com.example.covid19notification.ui.accountDetails
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +25,7 @@ class accountDetailsFragment : Fragment(), View.OnClickListener {
     private lateinit var mEtAddress: AppCompatTextView
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
+    private lateinit var userID: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,8 +35,11 @@ class accountDetailsFragment : Fragment(), View.OnClickListener {
         val v = inflater.inflate(R.layout.fragment_account_details, container, false)
         mEtUsername = v.findViewById(R.id.accountDetailNameData)
         mEtEmail = v.findViewById(R.id.AccountDetailEmailData)
-        mEtAddress = v.findViewById(R.id.AccountDetailEmailData)
+        mEtAddress = v.findViewById(R.id.AaccountDetailAddressData)
         db = FirebaseFirestore.getInstance()
+        auth = FirebaseAuth.getInstance()
+        userID = auth.currentUser!!.uid.toString();
+
 
         val btnDeleteAccount: Button = v.findViewById(R.id.accountDetDelete)
         btnDeleteAccount.setOnClickListener(this)
@@ -50,38 +55,57 @@ class accountDetailsFragment : Fragment(), View.OnClickListener {
     }
 
     private fun getAndSetAccountDetails() {
-        val username = getCurrentUser()
-        val email = getEmailFromDatabase()
-        val address = getAddressFromDatabase()
-        mEtUsername.text =(username.toString());
-        mEtEmail.text =(email.toString());
-        mEtAddress.text = address.toString()
+        getEmailFromDatabase()
+        getCurrentUser()
+        getAddressFromDatabase()
         val activity = requireActivity()
     }
 
-    private fun getCurrentUser(): String? {
-        return auth.currentUser!!.displayName;
-    }
-
-    private fun getEmailFromDatabase(): String? {
-        return auth.currentUser!!.email;
-        //TODO: Can make this editable with confirm button?
-    }
-
-    private fun getAddressFromDatabase(): String {
-        //TODO: Check this works
-        var userID = auth.currentUser!!.uid.toString();
-        var address = "";
-        var docRef = db.collection("users").document(userID)
-        docRef.get().addOnSuccessListener { result ->
-          address = result.data!!["address"].toString()
-            //This should get the address of the user with the specific id
+    private fun getCurrentUser() {
+        var username = "";
+        db.collection("users").document(userID).get().addOnSuccessListener { result ->
+            username = result.data!!["username"].toString();
+                Log.d(
+                    "dbAccess",
+                    "/n CurrentUser called. ->" + username + "<- Username should be printed"
+                )
+            mEtUsername.text = username
         }
-        return address;
-       }
+    }
+
+    private fun getEmailFromDatabase() {
+      //  return auth.currentUser!!.email;
+        var email = "";
+        db.collection("users").document(userID).get().addOnSuccessListener { result ->
+            email = result.data!!["email"].toString();
+            Log.d(
+                "dbAccess",
+                "/n CurrentUser called. ->" + email + "<- email should be printed"
+            )
+            mEtEmail.text = email;
+        }
+    }
+
+    private fun getAddressFromDatabase(){
+        var address = "N/A";
+        db.collection("users").document(userID).get().addOnSuccessListener { result ->
+            address = result.data!!["address"].toString();
+            Log.d(
+                "dbAccess",
+                "/n CurrentUser called. -> " + address + " <- address should be printed"
+            )
+            if(address==""){
+                address = "N/A"
+            }
+            mEtAddress.text = address;
+        }
+     }
 
     //TODO: add in an update button and onClick, update the value for the current user in the DB
     private fun updateAddress(){}
+
+    //TODO: Add in update button and textbox thing
+    private fun updateEmail(){}
 
     private fun deleteAccount(){
         //TODO: Hook in database
