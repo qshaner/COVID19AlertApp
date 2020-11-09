@@ -7,5 +7,7 @@ class Tags {
         val REGISTTRATION_FAILED = "REGISTRATION:Failed"
         val USER_LOGIN_SUCCESS = "LOGIN:Successful"
         val USER_LOGIN_FAILED = "LOGIN:Failed"
+        val GET_USER_FAILED = "GET_USER:Failed"
+        val GET_USER_SUCESS = "GET_USER:Successful"
     }
 }
