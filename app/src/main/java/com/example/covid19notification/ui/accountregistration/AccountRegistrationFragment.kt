@@ -18,6 +18,7 @@ import com.example.covid19notification.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.example.covid19notification.ui.login.Login
+import com.google.firebase.iid.FirebaseInstanceId
 
 class AccountRegistrationFragment  : Fragment(), View.OnClickListener {
     private lateinit var mEtUsername: EditText
@@ -47,7 +48,7 @@ class AccountRegistrationFragment  : Fragment(), View.OnClickListener {
 
         val btnLogin: Button = v.findViewById(R.id.buttonLogin)
         btnLogin.setOnClickListener(this)
-
+        Log.d("Firebase Token", "Your token is ${FirebaseInstanceId.getInstance().token}")
         return v
     }
 

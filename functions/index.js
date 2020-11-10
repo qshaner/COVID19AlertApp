@@ -16,14 +16,13 @@ exports.sendStatsToDevices = functions.pubsub.schedule('0 21 * * *')
         }
 
         return request(options).then(res => {
-            console.log("Result: ", res)
             const stats = res[0]
             const positiveIncrease = stats.positiveIncrease
             const deathIncrease = stats.deathIncrease
             const payload = {
                 notification: {
-                    title: "COVID-19 Daily Updates",
-                    body: `New Positive Cases: ${positiveIncrease}, New Deaths: ${deathIncrease}`
+                    title: "COVID-19 Daily Update",
+                    body: `New Positive Cases: ${positiveIncrease}\r\nNew Deaths: ${deathIncrease}`
                 }
             }
             return fcm.sendToDevice(tokens, payload).catch(err => console.log(err))
