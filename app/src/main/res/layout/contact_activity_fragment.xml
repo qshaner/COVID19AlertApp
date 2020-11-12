@@ -8,12 +8,44 @@
     tools:context=".ui.Contact.ContactActivtiyFragment">
 
     <TextView
-        android:id="@+id/message"
+        android:id="@+id/ContactTracing"
+        android:layout_width="349dp"
+        android:layout_height="88dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="Have you tested positive for Covid-19? This feature will make contact tracing easy. Select your contacts and this feature will provide you will a pre written message you can send!"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonContactTracing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ContactActivtiyFragment"
+        android:layout_marginStart="142dp"
+        android:layout_marginBottom="90dp"
+        android:text="Send Message"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextDatePositive"
+        android:layout_width="145dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginEnd="28dp"
+        android:ems="6"
+        android:hint="Select Date "
+        android:inputType="date"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="195dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="140dp"
+        android:text="What day did you test positive? "
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

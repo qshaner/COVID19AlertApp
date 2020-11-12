@@ -1,11 +1,15 @@
 package com.example.covid19notification.ui.Contact
 
+import android.content.Intent
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
 import com.example.covid19notification.R
 
 class ContactActivtiyFragment : Fragment() {
@@ -17,11 +21,40 @@ class ContactActivtiyFragment : Fragment() {
 
     private lateinit var viewModel: contactActivityViewModel
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+
+
+    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.contact_activity_fragment, container, false)
+
+       val root = inflater.inflate(R.layout.contact_activity_fragment, container, false)
+        val date: EditText = root.findViewById(R.id.editTextDatePositive)
+       val button : Button = root.findViewById(R.id.buttonContactTracing)
+
+
+
+        button.setOnClickListener{
+            Log.i("On Create View", "Button Clicked. ")
+            sendMessage()
+        }
+
+
+        return root
+    }
+
+
+
+
+
+    private fun sendMessage(){
+        val SMSIntent = Intent(Intent.ACTION_VIEW).apply {
+            putExtra(
+                "sms_body",
+                "Hello. Unfortunately, I have tested positive for Covid-19. Because I was around you within this time frame, it might be smart to quarentine until you can take a Covid-19 test."
+            )
+        }
+
+        Log.i("Send Message Fun", "Beginning Activity.")
+            startActivity(SMSIntent)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
