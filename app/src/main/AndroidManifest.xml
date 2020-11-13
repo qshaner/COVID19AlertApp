@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.covid19notification">
+    //To call the API
     <uses-permission android:name="android.permission.INTERNET" />
 
 
