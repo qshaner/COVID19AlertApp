@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.covid19notification">
-    <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -11,8 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.accountDetails.accountDetails"></activity>
-        <activity android:name=".ui.login.Login"></activity>
+        <activity android:name=".ui.symptomTracker.symptomTrackerActivity"></activity>
+        <activity android:name=".ui.accountDetails.accountDetails" />
+        <activity android:name=".ui.login.Login" />
         <activity
             android:name=".ui.SingleFragmentActivity"
             android:label="@string/title_activity_single_fragment"
@@ -20,18 +21,19 @@
         <activity android:name=".ui.accountregistration.AccountRegistration">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".ui.Contact.contactActivtiy" />
-        <activity android:name=".ui.ui.SymptomTracker.SymptomTracker" />
         <activity android:name=".ui.SensorActivity" />
         <activity android:name=".ui.resources.ResourcesActivity" />
         <activity android:name=".ui.news.NewsActivity" />
         <activity android:name=".ui.home.DashboardOptions" />
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name" />
+
         <service
             android:name=".Services.MyFirebaseMessagingService"
             android:exported="false">
@@ -39,9 +41,10 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
-
     </application>
+
 </manifest>
