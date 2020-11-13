@@ -1,6 +1,7 @@
 package com.example.covid19notification.ui.Contact
 
 import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.util.Log
@@ -28,13 +29,23 @@ class ContactActivtiyFragment : Fragment() {
 
        val root = inflater.inflate(R.layout.contact_activity_fragment, container, false)
         val date: EditText = root.findViewById(R.id.editTextDatePositive)
+
        val button : Button = root.findViewById(R.id.buttonContactTracing)
 
 
 
         button.setOnClickListener{
+            val dateVal = date.text.toString()
             Log.i("On Create View", "Button Clicked. ")
-            sendMessage()
+            val SMSIntent = Intent(Intent.ACTION_VIEW).apply {
+                setData(Uri.parse("sms:"));putExtra(
+                "sms_body",
+                "Hello. Unfortunately, I have tested positive for Covid-19 on $dateVal. Because I was around you within this time frame, it might be smart to quarentine until you can take a Covid-19 test."
+            )
+            }
+
+            Log.i("Send Message Fun", "Beginning Activity.")
+            startActivity(SMSIntent)
         }
 
 
@@ -46,15 +57,7 @@ class ContactActivtiyFragment : Fragment() {
 
 
     private fun sendMessage(){
-        val SMSIntent = Intent(Intent.ACTION_VIEW).apply {
-            putExtra(
-                "sms_body",
-                "Hello. Unfortunately, I have tested positive for Covid-19. Because I was around you within this time frame, it might be smart to quarentine until you can take a Covid-19 test."
-            )
-        }
 
-        Log.i("Send Message Fun", "Beginning Activity.")
-            startActivity(SMSIntent)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
