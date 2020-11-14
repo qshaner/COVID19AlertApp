@@ -2,6 +2,7 @@ package com.example.covid19notification.ui.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,8 @@ import com.example.covid19notification.ui.symptomTracker.symptomTrackerActivity
 class HomeFragment : Fragment(), View.OnClickListener {
 
     private lateinit var homeViewModel: HomeViewModel
+
+
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -46,8 +49,13 @@ class HomeFragment : Fragment(), View.OnClickListener {
     override fun onClick(v:View){
         val activity = requireActivity()
         when(v.id){
-            R.id.button_notify -> startActivity(Intent(activity.applicationContext, contactActivtiy::class.java))
+
             R.id.button_symptomTracker -> startActivity(Intent(activity.applicationContext, symptomTrackerActivity::class.java))
+
+            R.id.button_notify -> {startActivity(Intent(activity.applicationContext, contactActivtiy::class.java))
+                Log.i("Home Click", "Contact activity selected.")
+                }
+
             R.id.button_account_details -> startActivity(Intent(activity.applicationContext, accountDetails::class.java))
             //permission button here as well
         }
