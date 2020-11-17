@@ -12,6 +12,23 @@
     android:id="@+id/recycler_view"
     android:padding="4dp"
     android:clipToPadding="false"
+    android:layout_above="@id/symptomButtons"
     tools:listitem="@layout/example_item"
     />
+
+    <LinearLayout
+        android:id="@+id/symptomButtons"
+        android:padding="4dp"
+        android:clipToPadding="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+        <Button
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:text="Insert Item"
+            android:layout_weight="1"
+            android:onClick="insertItem">
+        </Button>
+    </LinearLayout>
 </RelativeLayout>
