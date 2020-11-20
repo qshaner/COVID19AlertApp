@@ -1,5 +1,6 @@
 package com.example.covid19notification.ui.accountregistration
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,13 +11,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import com.example.covid19notification.Database.Database
+import com.example.covid19notification.Database.Users
 import com.example.covid19notification.Helpers.Tags
 import com.example.covid19notification.MainActivity
 import com.example.covid19notification.Model.User
 import com.example.covid19notification.R
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.example.covid19notification.ui.login.Login
 import com.google.firebase.iid.FirebaseInstanceId
 
@@ -26,7 +26,6 @@ class AccountRegistrationFragment  : Fragment(), View.OnClickListener {
     private lateinit var mEtEmail: EditText
     private lateinit var mEtAddress: EditText
     private lateinit var auth: FirebaseAuth
-    private lateinit var db: FirebaseFirestore
 
     companion object {
         fun newInstance() = AccountRegistrationFragment()
@@ -42,13 +41,12 @@ class AccountRegistrationFragment  : Fragment(), View.OnClickListener {
         mEtEmail = v.findViewById(R.id.accountRegEmail)
         mEtAddress = v.findViewById(R.id.accountRegLocation)
         auth = FirebaseAuth.getInstance()
-        db = FirebaseFirestore.getInstance()
         val btnConfirm: Button = v.findViewById(R.id.buttonAccount)
         btnConfirm.setOnClickListener(this)
 
         val btnLogin: Button = v.findViewById(R.id.buttonLogin)
         btnLogin.setOnClickListener(this)
-        Log.d("Firebase Token", "Your token is ${FirebaseInstanceId.getInstance().token}")
+        Log.d(Tags.FIREBASE_TOKEN, "Your token is ${FirebaseInstanceId.getInstance().token}")
         return v
     }
 
@@ -69,25 +67,27 @@ class AccountRegistrationFragment  : Fragment(), View.OnClickListener {
         val address = mEtAddress.text.toString()
         val activity = requireActivity()
 
-        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener{task ->
-            if (task.isSuccessful) {
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnSuccessListener{task ->
                 val id = auth.currentUser!!.uid
                 val user = User(id, email, username, address)
-                Database.addToDatabase("users", id, user).addOnCompleteListener {
-                    if (it.isSuccessful) {
+                Users.add(user)
+                    .addOnSuccessListener {
                         Toast.makeText(activity.applicationContext, "Successfully created account", Toast.LENGTH_SHORT).show()
                         Log.d(Tags.REGISTRATION_SUCCESS, "Account successfully created and added to db")
                         startActivity(Intent(activity.applicationContext, MainActivity::class.java))
-                    } else {
-                        Log.e(Tags.DB_ADD_USER_ERROR, it.exception.toString())
+                    }
+                    .addOnFailureListener {
+                        Log.e(Tags.DB_ADD_USER_ERROR, it.message.toString())
                         Toast.makeText(activity.applicationContext, "Could not add user to database", Toast.LENGTH_SHORT).show()
                     }
-                }
-            } else {
-                Log.e(Tags.REGISTTRATION_FAILED, task.exception.toString());
-                Toast.makeText(activity.applicationContext, "Registration Failed", Toast.LENGTH_SHORT).show()
+
             }
+            .addOnFailureListener {
+                Log.e(Tags.REGISTTRATION_FAILED, it.message.toString());
+                Toast.makeText(activity.applicationContext, "Registration Failed", Toast.LENGTH_SHORT).show()
         }
+
     }
 
 }
