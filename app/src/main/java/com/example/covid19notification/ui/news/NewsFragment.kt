@@ -60,7 +60,7 @@ class NewsFragment : Fragment() {
                 Response.Listener { response ->
                     //for the response, log it, then set the text views at the appropriate cases.
                     Log.i("In API call.", response.toString())
-                    deaths.setText((response.getInt("death")).toString())
+                    deaths.setText((response.getInt("death")).toString() + " Deaths.")
                     Log.i("Death Count", response.getInt("death").toString() + " Deaths. ")
                     deathIncrease.setText(response.getInt("deathIncrease").toString() + " More deaths from Yesterday.")
                     currentHospital.setText(response.getInt("hospitalizedCurrently").toString() + " Are currently hospitlized from Covid 19. ")
