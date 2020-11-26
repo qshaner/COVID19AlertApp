@@ -5,7 +5,7 @@
         android:id="@+id/account_registration"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.accountDetails.accountDetailsFragment">
+        tools:context=".ui.AccountDetails.AccountDetailsFragment">
 
 
     <TextView

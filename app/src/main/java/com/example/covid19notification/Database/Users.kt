@@ -13,22 +13,22 @@ class Users {
         fun add(user: User): Task<Void> {
             return db.document(user.id).set(user)
         }
-        fun delete(id: String): Task<Void> {
-           return db.document(id).delete()
+        fun delete(user: User): Task<Void> {
+           return db.document(user.id).delete()
         }
 
-        fun update(id: String, key: String, value: Any): Task<Void> {
-            return db.document(id).update(key, value)
+        fun update(user: User, key: String, value: Any): Task<Void> {
+            return db.document(user.id).update(key, value)
         }
-        fun changeAddress(id: String, address: String): Task<Void> {
-            return update(id, "address", address)
+        fun changeAddress(user: User, address: String): Task<Void> {
+            return update(user, "address", address)
         }
-        fun changeName(id: String, name: String): Task<Void> {
-            return update(id, "name", name)
+        fun changeName(user: User, name: String): Task<Void> {
+            return update(user,"username", name)
         }
 
-        fun changeEmail(id: String, email: String): Task<Void> {
-            return update(id, "email", email)
+        fun changeEmail(user: User, email: String): Task<Void> {
+            return update(user, "email", email)
         }
         fun get(id: String): Task<DocumentSnapshot> {
             return db.document(id).get()

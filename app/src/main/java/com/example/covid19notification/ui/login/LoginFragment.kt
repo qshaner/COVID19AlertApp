@@ -11,8 +11,10 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.covid19notification.Database.Users
 import com.example.covid19notification.Helpers.Tags
 import com.example.covid19notification.MainActivity
+import com.example.covid19notification.Model.User
 import com.example.covid19notification.R
 import com.example.covid19notification.ui.accountregistration.AccountRegistration
 import com.example.covid19notification.ui.home.DashboardOptions
@@ -68,15 +70,39 @@ class LoginFragment : Fragment(), View.OnClickListener {
             val password = mEtPassword.text.toString()
 
             val auth = FirebaseAuth.getInstance()
-            auth.signInWithEmailAndPassword(username, password).addOnCompleteListener {
-                if (it.isSuccessful) {
-                    Log.i(Tags.USER_LOGIN_SUCCESS, "User successfully logged in")
-                    startActivity(Intent(activity.applicationContext, MainActivity::class.java))
-                    activity.finish()
-                } else {
-                    Log.e(Tags.USER_LOGIN_FAILED, it.exception.toString())
+            auth.signInWithEmailAndPassword(username, password)
+//                .addOnCompleteListener {
+//                if (it.isSuccessful) {
+
+//
+//                } else {
+
+//                }
+            .addOnSuccessListener {
+
+                    Users.get(it.user!!.uid)
+                        .addOnSuccessListener { snapshot ->
+
+                            val username = snapshot.get("username") as String
+                            val id = auth.currentUser!!.toString()
+                            val email = snapshot.get("email") as String
+                            val addr = snapshot.get("address") as String
+                            val user = User(id, email, username, addr)
+                            Log.i(Tags.USER_LOGIN_SUCCESS, "User successfully logged in")
+                            val intent = Intent(activity.applicationContext, MainActivity::class.java)
+                            intent.putExtra("user", user)
+
+                            startActivity(intent)
+                            activity.finish()
+                        }
+                        .addOnFailureListener {
+                            Log.e(Tags.USER_LOGIN_FAILED, it.message.toString())
+                            Toast.makeText(activity.applicationContext, "Error occurred when trying to login", Toast.LENGTH_SHORT).show()
+                        }
+                }
+                .addOnFailureListener {
+                    Log.e(Tags.USER_LOGIN_FAILED, it.message.toString())
                     Toast.makeText(activity.applicationContext, "Error occurred when trying to login", Toast.LENGTH_SHORT).show()
                 }
-            }
         }
     }

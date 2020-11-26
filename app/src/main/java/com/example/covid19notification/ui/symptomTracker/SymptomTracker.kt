@@ -7,7 +7,7 @@ import com.example.covid19notification.Model.Symptom
 import com.example.covid19notification.R
 import kotlinx.android.synthetic.main.activity_symptom_tracker.*
 
-class symptom_tracker : AppCompatActivity() {
+class SymptomTracker : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_symptom_tracker)

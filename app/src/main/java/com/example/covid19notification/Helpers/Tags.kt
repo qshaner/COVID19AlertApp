@@ -17,6 +17,7 @@ class Tags {
         val GET_EMAIL_FAILED = "GET_EMAIL:Failed"
         val FIREBASE_TOKEN = "GET_FIREBASE_TOKEN"
         val SENSOR_UNAVAILABLE = "SENSOR:Unavailable"
-
+        val CHANGE_EMAIL_SUCCESS = "CHANGE_EMAIL:Success"
+        val CHANGE_EMAIL_FAILED = "CHANGE_EMAIL:Failed"
     }
 }

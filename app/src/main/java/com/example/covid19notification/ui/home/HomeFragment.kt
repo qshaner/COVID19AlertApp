@@ -1,5 +1,6 @@
 package com.example.covid19notification.ui.home
 
+import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.content.*
 import android.content.Context.SENSOR_SERVICE
@@ -18,10 +19,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.covid19notification.Helpers.Tags
+import com.example.covid19notification.Model.User
 import com.example.covid19notification.R
 import com.example.covid19notification.ui.Contact.contactActivtiy
-import com.example.covid19notification.ui.accountDetails.accountDetails
-import com.example.covid19notification.ui.symptomTracker.symptom_tracker
+import com.example.covid19notification.ui.AccountDetails.AccountDetails
+import com.example.covid19notification.ui.symptomTracker.SymptomTracker
 
 class HomeFragment : Fragment(), View.OnClickListener, SensorEventListener {
 
@@ -29,7 +31,7 @@ class HomeFragment : Fragment(), View.OnClickListener, SensorEventListener {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var mSensorManager: SensorManager
     private var mSensor: Sensor? = null
-
+    private lateinit var user: User
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -38,7 +40,7 @@ class HomeFragment : Fragment(), View.OnClickListener, SensorEventListener {
         val v = inflater.inflate(R.layout.fragment_home, container)
         sharedPreferences = requireActivity().getSharedPreferences("COM.COVID19NOTIFICATION.SHARED_PREFS", Context.MODE_PRIVATE)
         mSensorManager = requireActivity().getSystemService(SENSOR_SERVICE) as SensorManager
-        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+        mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
         if (mSensor == null) {
                 Log.e(Tags.SENSOR_UNAVAILABLE, "linear accelerometer unavailable")
         }
@@ -57,6 +59,7 @@ class HomeFragment : Fragment(), View.OnClickListener, SensorEventListener {
         btnSymptomTracker.setOnClickListener(this)
         val btnAccount: Button = root.findViewById(R.id.button_account_details)
         btnAccount.setOnClickListener(this)
+        user = requireActivity().intent.getSerializableExtra("user") as User
         return root
     }
 
@@ -64,7 +67,7 @@ class HomeFragment : Fragment(), View.OnClickListener, SensorEventListener {
      AlertDialog.Builder(requireContext())
          .setTitle("Hey, you're moving kind of fast.")
          .setMessage("This is just a friendly reminder to bring your mask if you are going out in public.")
-         .setNeutralButton("OK",{dialogInterface, i ->  })
+         .setNeutralButton("OK",{_, _ ->  })
          .show()
     }
 
@@ -72,17 +75,21 @@ class HomeFragment : Fragment(), View.OnClickListener, SensorEventListener {
         val activity = requireActivity()
         when(v.id){
 
-            R.id.button_symptomTracker -> startActivity(Intent(activity.applicationContext, symptom_tracker::class.java))
+            R.id.button_symptomTracker -> launchSymptomTracker()
 
-            R.id.button_notify -> {startActivity(Intent(activity.applicationContext, contactActivtiy::class.java))
-                Log.i("Home Click", "Contact activity selected.")
-                }
+            R.id.button_notify -> launchContactActivity()
 
-            R.id.button_account_details -> startActivity(Intent(activity.applicationContext, accountDetails::class.java))
+            R.id.button_account_details -> launchAccountDetails()
             //permission button here as well
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            user = data!!.getSerializableExtra("user") as User
+        }
+    }
     override fun onSensorChanged(event: SensorEvent?) {
         if (event == null) return
         if (event.sensor.type == Sensor.TYPE_LINEAR_ACCELERATION) {
@@ -99,6 +106,24 @@ class HomeFragment : Fragment(), View.OnClickListener, SensorEventListener {
 
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
     }
+
+    private fun launchSymptomTracker() {
+        val intent = Intent(requireActivity().applicationContext, SymptomTracker::class.java)
+        intent.putExtra("user", user)
+        startActivityForResult(intent, 1)
+    }
+
+    private fun launchContactActivity() {
+        startActivity(Intent(requireActivity().applicationContext, contactActivtiy::class.java))
+    }
+
+    private fun launchAccountDetails() {
+        val intent = Intent(requireActivity().applicationContext, AccountDetails::class.java)
+        intent.putExtra("user", user)
+        startActivityForResult(intent, 1)
+    }
+
+
 //TODO: Needs to have the Navbar as well
 
 }

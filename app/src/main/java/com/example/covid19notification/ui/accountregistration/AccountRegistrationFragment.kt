@@ -66,16 +66,18 @@ class AccountRegistrationFragment  : Fragment(), View.OnClickListener {
         val email = mEtEmail.text.toString()
         val address = mEtAddress.text.toString()
         val activity = requireActivity()
-
         auth.createUserWithEmailAndPassword(email, password)
-            .addOnSuccessListener{task ->
+            .addOnSuccessListener {
                 val id = auth.currentUser!!.uid
                 val user = User(id, email, username, address)
                 Users.add(user)
                     .addOnSuccessListener {
                         Toast.makeText(activity.applicationContext, "Successfully created account", Toast.LENGTH_SHORT).show()
                         Log.d(Tags.REGISTRATION_SUCCESS, "Account successfully created and added to db")
-                        startActivity(Intent(activity.applicationContext, MainActivity::class.java))
+                        val intent = Intent(activity.applicationContext, MainActivity::class.java)
+                        intent.putExtra("user", user)
+
+                        startActivity(intent)
                     }
                     .addOnFailureListener {
                         Log.e(Tags.DB_ADD_USER_ERROR, it.message.toString())
@@ -86,6 +88,7 @@ class AccountRegistrationFragment  : Fragment(), View.OnClickListener {
             .addOnFailureListener {
                 Log.e(Tags.REGISTTRATION_FAILED, it.message.toString());
                 Toast.makeText(activity.applicationContext, "Registration Failed", Toast.LENGTH_SHORT).show()
+
         }
 
     }
