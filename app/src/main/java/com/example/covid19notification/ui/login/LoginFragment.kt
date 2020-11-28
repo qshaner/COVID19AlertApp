@@ -71,13 +71,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
 
             val auth = FirebaseAuth.getInstance()
             auth.signInWithEmailAndPassword(username, password)
-//                .addOnCompleteListener {
-//                if (it.isSuccessful) {
 
-//
-//                } else {
-
-//                }
             .addOnSuccessListener {
 
                     Users.get(it.user!!.uid)
