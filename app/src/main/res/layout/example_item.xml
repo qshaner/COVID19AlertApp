@@ -10,7 +10,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="228dp"
-        android:padding="8dp">
+        android:padding="8dp"
+        android:id="@+id/example_item">
 
         <TextView
             android:id="@+id/item_date"
@@ -48,33 +49,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/item_date"
             app:layout_constraintVertical_bias="0.274" />
-
-        <ImageButton
-            android:id="@+id/item_button_edit"
-            android:layout_width="92dp"
-            android:layout_height="27dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/colorAccent"
-            android:src="@drawable/ic_edit"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/item_button_delete"
-            app:layout_constraintHorizontal_bias="0.093"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/item_content"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <ImageButton
-            android:id="@+id/item_button_delete"
-            android:layout_width="121dp"
-            android:layout_height="29dp"
-            android:layout_marginTop="8dp"
-            android:background="@color/colorAccent"
-            android:src="@drawable/trashcan"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.944"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/item_content" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

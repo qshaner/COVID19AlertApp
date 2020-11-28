@@ -1,3 +1,3 @@
 package com.example.covid19notification.Model
 
-data class Symptom(val ImageResource: String, val text1: String, val text2: String)
+data class Symptom(val date: String, val symptoms: ArrayList<String>)
