@@ -1,15 +1,21 @@
 package com.example.covid19notification.ui.symptomTracker
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Button
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.covid19notification.Model.Symptom
 import com.example.covid19notification.R
+import com.example.covid19notification.ui.accountregistration.AccountRegistration
 
+private lateinit var btnAddSymptomEntry: ImageButton
 
-class SymptomTracker : AppCompatActivity() {
+class SymptomTracker : AppCompatActivity(), View.OnClickListener {
     private var TAG = "SymptomTrackerActivity"
 
     private var mSymptomEntries: ArrayList<Symptom> = ArrayList()
@@ -19,7 +25,8 @@ class SymptomTracker : AppCompatActivity() {
         setContentView(R.layout.activity_symptom_tracker)
 
         Log.d(TAG, "Symptom Tracker On Create")
-
+        btnAddSymptomEntry = findViewById(R.id.addSymptomEntry)
+        btnAddSymptomEntry.setOnClickListener(this)
         initSymptomEntries()
     }
 
@@ -76,6 +83,20 @@ class SymptomTracker : AppCompatActivity() {
            // list +=item
         }
         return list
+    }
+
+    override fun onClick(v: View?) {
+        val activity = this
+        if (v != null) {
+            when (v.id) {
+                R.id.addSymptomEntry -> startActivity(
+                    Intent(
+                        activity.applicationContext,
+                        SymptomDetails::class.java
+                    )
+                )
+            }
+        }
     }
 
 }
