@@ -36,7 +36,9 @@ class SymptomAdapter(
     ) {
         val tag = "OnBindViewHolder"
 Log.d(tag," onBindViewHolder() called")
+        Log.d(tag, " SymptomEntry: ${mSymptomEntries[position]}")
         holder.symptomDate.text = mSymptomEntries[position].date
+        holder.symptomList.text = mSymptomEntries[position].symptoms.toString()
         holder.parentLayout.setOnClickListener {
             Log.d(
                 tag,
@@ -61,8 +63,8 @@ Log.d(tag," onBindViewHolder() called")
         var parentLayout: RelativeLayout
 
         init {
-            symptomDate = itemView.findViewById(R.id.item_date)
-            symptomList = itemView.findViewById(R.id.item_content)
+            symptomDate = itemView.findViewById(R.id.symptomDate)
+            symptomList = itemView.findViewById(R.id.symptomList)
             parentLayout = itemView.findViewById(R.id.example_item)
         }
     }
