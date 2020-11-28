@@ -55,8 +55,8 @@ class SymptomDetails : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun setEntry(entryDate:String?, entrySymptoms: ArrayList<String?>){
-        var date: TextView = findViewById(R.id.symptomDate)
-        date.text = entryDate;
+        var date: EditText = findViewById(R.id.symptomDate)
+        date.setText(entryDate);
         var symptoms: EditText = findViewById(R.id.etSymptomList)
         symptoms.setText(entrySymptoms.toString())
     }

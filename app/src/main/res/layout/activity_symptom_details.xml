@@ -9,15 +9,18 @@
     tools:context="com.example.covid19notification.ui.symptomTracker.SymptomDetails">
 
 
-    <TextView
+    <EditText
         android:id="@+id/symptomDate"
         android:layout_width="match_parent"
+        android:textSize="30dp"
+        android:textStyle="bold"
         android:layout_height="wrap_content"
         android:layout_weight="20"
         android:text="DATE" />
 
     <EditText
         android:id="@+id/etSymptomList"
+        android:textSize="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
        android:layout_weight="60"/>
