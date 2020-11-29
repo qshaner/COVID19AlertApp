@@ -11,7 +11,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.covid19notification.Model.Symptom
+import com.example.covid19notification.Model.User
 import com.example.covid19notification.R
+import com.google.firebase.auth.FirebaseAuth
+
 
 
 class SymptomAdapter(
@@ -46,8 +49,20 @@ Log.d(tag," onBindViewHolder() called")
             )
             Toast.makeText(mContext, mSymptomEntries[position].date, Toast.LENGTH_SHORT).show()
             val intent = Intent(mContext, SymptomDetails::class.java)
+            if(intent.hasExtra("user")) {
+                Log.d("entries3: ", "Intent in SymptomAdapter has user")
+                var user = intent.getSerializableExtra("user")
+                intent.putExtra("user", user as User)
+                //now SymptomDetails will have the right intents
+            }
+            else {
+                //val auth = FirebaseAuth.getInstance()
+            //var user = auth.currentUser;
+                Log.d("Entries2: ", "Intent has no user in SymptomAdapter")
+            }
             intent.putExtra("symptoms", mSymptomEntries[position].symptoms)
             intent.putExtra("date", mSymptomEntries[position].date)
+           // intent.putExtra("user",  )
             mContext.startActivity(intent)
         }
     }

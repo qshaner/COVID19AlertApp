@@ -4,14 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.covid19notification.Database.Symptoms
 import com.example.covid19notification.Model.Symptom
+import com.example.covid19notification.Model.User
 import com.example.covid19notification.R
-import com.example.covid19notification.ui.accountregistration.AccountRegistration
 
 private lateinit var btnAddSymptomEntry: ImageButton
 
@@ -33,17 +33,23 @@ class SymptomTracker : AppCompatActivity(), View.OnClickListener {
     private fun initSymptomEntries(){
         Log.d(TAG, "initSymptomEntries: Preparing Symptom Entries")
 
-        //TODO: Get entries from DB
 
-        var symptoms: ArrayList<String> = arrayListOf<String>("symptom 1", "symptom 2")
+       var userID = (intent.getSerializableExtra("user") as User).id;
+        Symptoms.getAllEntries(userID).addOnSuccessListener { result ->
+            for (document in result){
+                mSymptomEntries.add(Symptom(document["date"].toString(), document["symptoms"] as ArrayList<String>))
+                Log.d("SympTracker", "document data: $document")
+            }
+            Log.d("SympTracker2: ", "What is result: ${result.documents}")
+        }
+
+
+    /*    var symptoms: ArrayList<String> = arrayListOf<String>("symptom 1", "symptom 2")
         mSymptomEntries.add(Symptom("Date 1", symptoms ))
-
         symptoms = arrayListOf<String>("symptom 1, symptom 3, symptom 4, symptom 6, symptom 5, symptom 7")
         mSymptomEntries.add(Symptom("Date 2", symptoms ))
-
         symptoms = arrayListOf<String>("symptom 3, symptom 5, symptom 6")
         mSymptomEntries.add(Symptom("Date 3", symptoms ))
-
         symptoms = arrayListOf<String>("Symptoms for Entry 4")
         mSymptomEntries.add(Symptom("Date 4", symptoms ))
         symptoms = arrayListOf<String>("Symptoms for Entry 5")
@@ -60,7 +66,7 @@ class SymptomTracker : AppCompatActivity(), View.OnClickListener {
         mSymptomEntries.add(Symptom("Date 10", symptoms ))
         symptoms = arrayListOf<String>("Symptoms for Entry 11")
         mSymptomEntries.add(Symptom("Date 11", symptoms ))
-
+*/
         initRecyclerView()
     }
 
@@ -73,17 +79,6 @@ class SymptomTracker : AppCompatActivity(), View.OnClickListener {
         recyclerView.layoutManager = LinearLayoutManager(this)
     }
 
-
-    //TODO: Change this to a 'get things from the DB using the UID'
-    private fun generateDummyList(size: Int):List<Symptom>{
-        val list = ArrayList<Symptom>()
-
-        for(i in 0 until size) {
-           // val item = Symptom("$i", "DD/MM/YYYY", "the list of all of the things")
-           // list +=item
-        }
-        return list
-    }
 
     override fun onClick(v: View?) {
         val activity = this

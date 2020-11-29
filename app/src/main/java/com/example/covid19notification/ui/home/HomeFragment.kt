@@ -23,6 +23,7 @@ import com.example.covid19notification.Model.User
 import com.example.covid19notification.R
 import com.example.covid19notification.ui.Contact.contactActivtiy
 import com.example.covid19notification.ui.AccountDetails.AccountDetails
+import com.example.covid19notification.ui.symptomTracker.SymptomDetails
 import com.example.covid19notification.ui.symptomTracker.SymptomTracker
 
 class HomeFragment : Fragment(), View.OnClickListener, SensorEventListener {
@@ -51,8 +52,6 @@ class HomeFragment : Fragment(), View.OnClickListener, SensorEventListener {
         homeViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
-        val btnPermissions: Button = root.findViewById(R.id.button_permission)
-        btnPermissions.setOnClickListener(this)
         val btnNotify: Button = root.findViewById(R.id.button_notify)
         btnNotify.setOnClickListener(this)
         val btnSymptomTracker: Button = root.findViewById(R.id.button_symptomTracker)
@@ -73,6 +72,9 @@ class HomeFragment : Fragment(), View.OnClickListener, SensorEventListener {
 
     override fun onClick(v:View){
         val activity = requireActivity()
+        val intent = Intent(this.context, SymptomDetails::class.java)
+        intent.putExtra("user", user)
+       // mContext.startActivity(intent)
         when(v.id){
 
             R.id.button_symptomTracker -> launchSymptomTracker()

@@ -2,6 +2,7 @@ package com.example.covid19notification.ui.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ import com.example.covid19notification.R
 import com.example.covid19notification.ui.accountregistration.AccountRegistration
 import com.example.covid19notification.ui.home.DashboardOptions
 import com.google.firebase.auth.FirebaseAuth
+import java.io.Serializable
 
 
 /**
