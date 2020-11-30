@@ -12,7 +12,7 @@ import com.example.covid19notification.Model.Symptom
 import com.example.covid19notification.Model.User
 import com.example.covid19notification.R
 import kotlinx.android.synthetic.main.activity_symptom_details.*
-import java.util.ArrayList
+import kotlin.collections.ArrayList
 
 private lateinit var btnSubmitSymptoms: Button
 private lateinit var btnDeleteEntry: Button
@@ -38,20 +38,21 @@ class SymptomDetails : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    //TODO: Delete from  (Get symptom date from text field, then delete it
     fun deleteEntry(){
       //  val activity = requireActivity()
         Toast.makeText(this.applicationContext, "onClick: Delete Entry Pressed", Toast.LENGTH_SHORT).show()
-       // Symptoms.delete(symptom)
+        val symptom = Symptom(symptomDate.text.toString(), (etSymptomList.text.split(",") as ArrayList<String>))
+        Symptoms.delete(symptom)
     }
 
-    //TODO: make generic
     fun submitEntry(){
     //    userid = (intent.getStringExtra("user") as User).id
         Toast.makeText(this.applicationContext, "onClick: Submit Entry Pressed", Toast.LENGTH_SHORT).show()
-        var testArr: ArrayList<String> = arrayListOf("cough", "sneezing", "chills")
-        Symptoms.add(Symptom("02-08-2023", testArr))
 
+        var symptomsEntry = etSymptomList.text.split(",") as ArrayList<String>
+        var dateEntry = symptomDate.text.toString();
+
+        Symptoms.add(Symptom(dateEntry, symptomsEntry))
     }
 
     private fun getIncomingIntent(){

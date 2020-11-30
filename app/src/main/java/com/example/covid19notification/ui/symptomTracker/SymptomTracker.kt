@@ -9,6 +9,7 @@ import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.covid19notification.Database.Symptoms
 import com.example.covid19notification.Model.Symptom
 import com.example.covid19notification.Model.User
 import com.example.covid19notification.R
@@ -36,6 +37,12 @@ class SymptomTracker : AppCompatActivity(), View.OnClickListener {
 
         //TODO: Get entries from DB
 
+        Symptoms.getAllSymptomEntries().addOnSuccessListener({entries ->
+Log.d("initEntries: ", "INIT ENTRIES = ${entries}")        })
+
+        /*
+        //enable/uncomment this if you want to see the recyclerview working right away
+
         var symptoms: ArrayList<String> = arrayListOf<String>("symptom 1", "symptom 2")
         mSymptomEntries.add(Symptom("Date 1", symptoms ))
 
@@ -61,7 +68,7 @@ class SymptomTracker : AppCompatActivity(), View.OnClickListener {
         mSymptomEntries.add(Symptom("Date 10", symptoms ))
         symptoms = arrayListOf<String>("Symptoms for Entry 11")
         mSymptomEntries.add(Symptom("Date 11", symptoms ))
-
+*/
         initRecyclerView()
     }
 
