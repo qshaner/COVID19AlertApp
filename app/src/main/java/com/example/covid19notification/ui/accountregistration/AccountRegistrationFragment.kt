@@ -1,6 +1,7 @@
 package com.example.covid19notification.ui.accountregistration
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import com.example.covid19notification.Database.Users
 import com.example.covid19notification.Helpers.Tags
 import com.example.covid19notification.MainActivity
@@ -48,6 +50,7 @@ class AccountRegistrationFragment  : Fragment(), View.OnClickListener {
 
         val btnLogin: Button = v.findViewById(R.id.buttonLogin)
         btnLogin.setOnClickListener(this)
+        setTheme()
         return v
     }
 
@@ -58,6 +61,16 @@ class AccountRegistrationFragment  : Fragment(), View.OnClickListener {
             R.id.buttonLogin -> {startActivity(Intent(activity.applicationContext, Login::class.java))
             activity.finish()
             }
+        }
+    }
+
+    private fun setTheme() {
+        val isDarkModePreferred = requireActivity().getSharedPreferences("COM.COVID19NOTIFICATION.SHARED_PREFS",
+            Context.MODE_PRIVATE).getBoolean("DARK_MODE_PREFERRED", false)
+        Log.d("Darkmode preference", "Is darkMode preferred? $isDarkModePreferred")
+        if (isDarkModePreferred) { AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES) }
+        else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
     }
 

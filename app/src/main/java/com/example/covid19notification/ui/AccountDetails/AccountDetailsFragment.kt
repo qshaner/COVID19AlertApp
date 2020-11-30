@@ -1,7 +1,9 @@
 package com.example.covid19notification.ui.AccountDetails
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -10,7 +12,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Switch
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.edit
 import com.example.covid19notification.Database.Users
 import com.example.covid19notification.Helpers.Tags
 import com.example.covid19notification.Model.User
@@ -31,6 +36,8 @@ class AccountDetailsFragment : Fragment(), View.OnClickListener {
     private lateinit var db: FirebaseFirestore
     private lateinit var userID: String
     private lateinit var user: User
+    private lateinit var mDarkModeSwitch: Switch
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,15 +48,19 @@ class AccountDetailsFragment : Fragment(), View.OnClickListener {
         mEtUsername = v.findViewById(R.id.accountDetailNameData)
         mEtEmail = v.findViewById(R.id.AccountDetailEmailData)
         mEtAddress = v.findViewById(R.id.AaccountDetailAddressData)
-        db = FirebaseFirestore.getInstance()
-        auth = FirebaseAuth.getInstance()
-        userID = auth.currentUser!!.uid
+        mDarkModeSwitch = v.findViewById(R.id.darkModeSwitch)
         user = requireActivity().intent.getSerializableExtra("user") as User
+        sharedPreferences = requireActivity().getSharedPreferences("COM.COVID19NOTIFICATION.SHARED_PREFS",
+            Context.MODE_PRIVATE)
         val submitAccountDetails: Button = v.findViewById(R.id.ButtonAccountDataUpdate)
         submitAccountDetails.setOnClickListener(this)
         val btnDeleteAccount: Button = v.findViewById(R.id.accountDetDelete)
         btnDeleteAccount.setOnClickListener(this)
         setAccountDetails()
+        mDarkModeSwitch.setOnCheckedChangeListener{_, isChecked ->
+            switchTheme(isChecked)
+        }
+        mDarkModeSwitch.isChecked = sharedPreferences.getBoolean("DARK_MODE_PREFERRED", false)
         Log.d("CurrentUser", "User coming in is $user")
         return v
     }
@@ -125,6 +136,14 @@ class AccountDetailsFragment : Fragment(), View.OnClickListener {
         requireActivity().setResult(Activity.RESULT_OK, intent)
     }
 
+    private fun switchTheme(isChecked: Boolean) {
+        if (isChecked) { AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES) }
+        else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+        sharedPreferences.edit().putBoolean("DARK_MODE_PREFERRED", isChecked).apply()
+
+    }
     private fun deleteAccount() {
         val activity = requireActivity()
         auth.currentUser!!.delete()

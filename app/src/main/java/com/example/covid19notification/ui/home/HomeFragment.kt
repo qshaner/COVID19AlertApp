@@ -73,17 +73,6 @@ class HomeFragment : Fragment(), View.OnClickListener, SensorEventListener {
          .show()
     }
 
-    private fun getSymptoms() {
-        Symptoms.getSymptoms(user)
-            .addOnSuccessListener {
-                symptoms = if (it.data == null) hashMapOf() else it.data!! as HashMap<String, Any>
-                Log.d("HOME_GET_SYMPTOMS","Successfully retrieved symptoms")
-            }
-            .addOnFailureListener {
-                symptoms = hashMapOf()
-            }
-    }
-
     override fun onClick(v:View){
         when(v.id){
             R.id.button_symptomTracker -> launchSymptomTracker()
@@ -101,10 +90,9 @@ class HomeFragment : Fragment(), View.OnClickListener, SensorEventListener {
             if (data.hasExtra("symptoms")) {
                 symptoms = data!!.getSerializableExtra("symptoms") as HashMap<String, Any>
             }
-
         }
-
     }
+
     override fun onSensorChanged(event: SensorEvent?) {
         if (event == null) return
         if (event.sensor.type == Sensor.TYPE_LINEAR_ACCELERATION) {
@@ -114,6 +102,7 @@ class HomeFragment : Fragment(), View.OnClickListener, SensorEventListener {
             if (accelerationX > 0.7 && System.currentTimeMillis() - timeElapsed > ONE_HOUR) {
                 sharedPreferences.edit()
                     .putLong("LAST_NOTIFICATION_TIMESTAMP", System.currentTimeMillis())
+                    .apply()
                 showAlert()
             }
         }
