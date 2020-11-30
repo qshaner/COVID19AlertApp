@@ -51,8 +51,6 @@ class HomeFragment : Fragment(), View.OnClickListener, SensorEventListener {
         homeViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
-        val btnPermissions: Button = root.findViewById(R.id.button_permission)
-        btnPermissions.setOnClickListener(this)
         val btnNotify: Button = root.findViewById(R.id.button_notify)
         btnNotify.setOnClickListener(this)
         val btnSymptomTracker: Button = root.findViewById(R.id.button_symptomTracker)
