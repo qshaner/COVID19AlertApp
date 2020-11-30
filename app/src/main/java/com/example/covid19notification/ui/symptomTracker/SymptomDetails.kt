@@ -7,13 +7,16 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.example.covid19notification.Database.Symptoms
+import com.example.covid19notification.Model.Symptom
+import com.example.covid19notification.Model.User
 import com.example.covid19notification.R
 import kotlinx.android.synthetic.main.activity_symptom_details.*
 import java.util.ArrayList
 
 private lateinit var btnSubmitSymptoms: Button
 private lateinit var btnDeleteEntry: Button
-
+private lateinit var userid:String;
 class SymptomDetails : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +27,7 @@ class SymptomDetails : AppCompatActivity(), View.OnClickListener {
         btnDeleteEntry = findViewById(R.id.btnDeleteSymptom)
         btnDeleteEntry.setOnClickListener(this)
 
+        userid = ""
         getIncomingIntent();
     }
 
@@ -34,15 +38,20 @@ class SymptomDetails : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    //TODO: Delete from DB
+    //TODO: Delete from  (Get symptom date from text field, then delete it
     fun deleteEntry(){
       //  val activity = requireActivity()
         Toast.makeText(this.applicationContext, "onClick: Delete Entry Pressed", Toast.LENGTH_SHORT).show()
+       // Symptoms.delete(symptom)
     }
 
-    //TODO: Add to DB
+    //TODO: make generic
     fun submitEntry(){
+    //    userid = (intent.getStringExtra("user") as User).id
         Toast.makeText(this.applicationContext, "onClick: Submit Entry Pressed", Toast.LENGTH_SHORT).show()
+        var testArr: ArrayList<String> = arrayListOf("cough", "sneezing", "chills")
+        Symptoms.add(Symptom("02-08-2023", testArr))
+
     }
 
     private fun getIncomingIntent(){
@@ -50,6 +59,9 @@ class SymptomDetails : AppCompatActivity(), View.OnClickListener {
             var date = intent.getStringExtra("date")
             var symptomEntries: ArrayList<String?> = intent.getStringArrayListExtra("symptoms") as ArrayList<String?>
 
+            if(intent.hasExtra("user")){
+                userid = (intent.getStringExtra("user") as User).id
+            }
             setEntry(date, symptomEntries)
         }
     }

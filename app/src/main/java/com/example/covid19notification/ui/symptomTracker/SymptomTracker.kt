@@ -10,11 +10,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.covid19notification.Model.Symptom
+import com.example.covid19notification.Model.User
 import com.example.covid19notification.R
 import com.example.covid19notification.ui.accountregistration.AccountRegistration
 
 private lateinit var btnAddSymptomEntry: ImageButton
-
+private lateinit var userid: String;
 class SymptomTracker : AppCompatActivity(), View.OnClickListener {
     private var TAG = "SymptomTrackerActivity"
 
@@ -72,6 +73,7 @@ class SymptomTracker : AppCompatActivity(), View.OnClickListener {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
     }
+
 
 
     //TODO: Change this to a 'get things from the DB using the UID'
