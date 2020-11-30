@@ -1,5 +1,6 @@
 package com.example.covid19notification.ui.symptomTracker
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -11,16 +12,21 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.covid19notification.Model.Symptom
+import com.example.covid19notification.Model.User
 import com.example.covid19notification.R
 
 
 class SymptomAdapter(
     context: Context,
-    symptomEntries: ArrayList<Symptom>
+    symptomEntries: ArrayList<Symptom>,
+    ids: ArrayList<String>,
+    user: User
 ) :
     RecyclerView.Adapter<SymptomAdapter.ViewHolder>() {
     private var mSymptomEntries: ArrayList<Symptom> = ArrayList()
     private val mContext: Context
+    private var mIds: ArrayList<String> = ArrayList()
+    private lateinit var mUser: User
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -35,20 +41,19 @@ class SymptomAdapter(
         position: Int
     ) {
         val tag = "OnBindViewHolder"
-Log.d(tag," onBindViewHolder() called")
+        Log.d(tag," onBindViewHolder() called")
         Log.d(tag, " SymptomEntry: ${mSymptomEntries[position]}")
         holder.symptomDate.text = mSymptomEntries[position].date
-        holder.symptomList.text = mSymptomEntries[position].symptoms.toString()
+        holder.symptomList.text = mSymptomEntries[position].text
         holder.parentLayout.setOnClickListener {
-            Log.d(
-                tag,
-                "onClick: clicked on: " + mSymptomEntries[position]
-            )
-            Toast.makeText(mContext, mSymptomEntries[position].date, Toast.LENGTH_SHORT).show()
+            Log.d(tag, "onClick: clicked on: " + mSymptomEntries[position])
             val intent = Intent(mContext, SymptomDetails::class.java)
-            intent.putExtra("symptoms", mSymptomEntries[position].symptoms)
+            intent.putExtra("text", mSymptomEntries[position].text)
             intent.putExtra("date", mSymptomEntries[position].date)
-            mContext.startActivity(intent)
+            intent.putExtra("id", mIds[position])
+            intent.putExtra("user", mUser)
+            val activity =  mContext as Activity
+            activity.startActivityForResult(intent, 1)
         }
     }
 
@@ -76,5 +81,7 @@ Log.d(tag," onBindViewHolder() called")
     init {
         mSymptomEntries = symptomEntries
         mContext = context
+        mIds = ids
+        mUser = user
     }
 }

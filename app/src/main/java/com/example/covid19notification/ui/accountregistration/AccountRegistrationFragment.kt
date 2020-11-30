@@ -14,10 +14,12 @@ import android.widget.Toast
 import com.example.covid19notification.Database.Users
 import com.example.covid19notification.Helpers.Tags
 import com.example.covid19notification.MainActivity
+import com.example.covid19notification.Model.Symptom
 import com.example.covid19notification.Model.User
 import com.example.covid19notification.R
 import com.google.firebase.auth.FirebaseAuth
 import com.example.covid19notification.ui.login.Login
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
 
 class AccountRegistrationFragment  : Fragment(), View.OnClickListener {
@@ -46,7 +48,6 @@ class AccountRegistrationFragment  : Fragment(), View.OnClickListener {
 
         val btnLogin: Button = v.findViewById(R.id.buttonLogin)
         btnLogin.setOnClickListener(this)
-        Log.d(Tags.FIREBASE_TOKEN, "Your token is ${FirebaseInstanceId.getInstance().token}")
         return v
     }
 

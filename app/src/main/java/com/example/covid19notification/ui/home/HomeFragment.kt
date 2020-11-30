@@ -18,12 +18,15 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.example.covid19notification.Database.Symptoms
 import com.example.covid19notification.Helpers.Tags
+import com.example.covid19notification.Model.Symptom
 import com.example.covid19notification.Model.User
 import com.example.covid19notification.R
 import com.example.covid19notification.ui.Contact.contactActivtiy
 import com.example.covid19notification.ui.AccountDetails.AccountDetails
 import com.example.covid19notification.ui.symptomTracker.SymptomTracker
+import java.io.Serializable
 
 class HomeFragment : Fragment(), View.OnClickListener, SensorEventListener {
 
@@ -32,6 +35,7 @@ class HomeFragment : Fragment(), View.OnClickListener, SensorEventListener {
     private lateinit var mSensorManager: SensorManager
     private var mSensor: Sensor? = null
     private lateinit var user: User
+    private lateinit var symptoms: HashMap<String, Any>
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -51,8 +55,6 @@ class HomeFragment : Fragment(), View.OnClickListener, SensorEventListener {
         homeViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
-        val btnPermissions: Button = root.findViewById(R.id.button_permission)
-        btnPermissions.setOnClickListener(this)
         val btnNotify: Button = root.findViewById(R.id.button_notify)
         btnNotify.setOnClickListener(this)
         val btnSymptomTracker: Button = root.findViewById(R.id.button_symptomTracker)
@@ -71,24 +73,37 @@ class HomeFragment : Fragment(), View.OnClickListener, SensorEventListener {
          .show()
     }
 
+    private fun getSymptoms() {
+        Symptoms.getSymptoms(user)
+            .addOnSuccessListener {
+                symptoms = if (it.data == null) hashMapOf() else it.data!! as HashMap<String, Any>
+                Log.d("HOME_GET_SYMPTOMS","Successfully retrieved symptoms")
+            }
+            .addOnFailureListener {
+                symptoms = hashMapOf()
+            }
+    }
+
     override fun onClick(v:View){
-        val activity = requireActivity()
         when(v.id){
-
             R.id.button_symptomTracker -> launchSymptomTracker()
-
             R.id.button_notify -> launchContactActivity()
-
             R.id.button_account_details -> launchAccountDetails()
-            //permission button here as well
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1 && resultCode == RESULT_OK) {
-            user = data!!.getSerializableExtra("user") as User
+            if (data!!.hasExtra("user")) {
+                user = data!!.getSerializableExtra("user") as User
+            }
+            if (data.hasExtra("symptoms")) {
+                symptoms = data!!.getSerializableExtra("symptoms") as HashMap<String, Any>
+            }
+
         }
+
     }
     override fun onSensorChanged(event: SensorEvent?) {
         if (event == null) return
@@ -108,9 +123,19 @@ class HomeFragment : Fragment(), View.OnClickListener, SensorEventListener {
     }
 
     private fun launchSymptomTracker() {
-        val intent = Intent(requireActivity().applicationContext, SymptomTracker::class.java)
-        intent.putExtra("user", user)
-        startActivityForResult(intent, 1)
+        Symptoms.getSymptoms(user)
+            .addOnSuccessListener {
+                symptoms = if (it.data == null) hashMapOf() else it.data!! as HashMap<String, Any>
+                Log.d("HOME_GET_SYMPTOMS","Successfully retrieved symptoms")
+                val intent = Intent(requireActivity().applicationContext, SymptomTracker::class.java)
+                intent.putExtra("user", user)
+                intent.putExtra("symptoms", symptoms)
+                startActivityForResult(intent, 1)
+            }
+            .addOnFailureListener {
+                symptoms = hashMapOf()
+            }
+
     }
 
     private fun launchContactActivity() {
@@ -122,8 +147,4 @@ class HomeFragment : Fragment(), View.OnClickListener, SensorEventListener {
         intent.putExtra("user", user)
         startActivityForResult(intent, 1)
     }
-
-
-//TODO: Needs to have the Navbar as well
-
 }
