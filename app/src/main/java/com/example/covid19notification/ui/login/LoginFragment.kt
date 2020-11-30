@@ -78,7 +78,7 @@ class LoginFragment : Fragment(), View.OnClickListener {
                         .addOnSuccessListener { snapshot ->
 
                             val username = snapshot.get("username") as String
-                            val id = auth.currentUser!!.toString()
+                            val id = it.user!!.uid
                             val email = snapshot.get("email") as String
                             val addr = snapshot.get("address") as String
                             val user = User(id, email, username, addr)

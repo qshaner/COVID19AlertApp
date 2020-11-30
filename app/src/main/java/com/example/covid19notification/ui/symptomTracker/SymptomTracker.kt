@@ -4,23 +4,23 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.covid19notification.Database.Symptoms
+import com.example.covid19notification.Helpers.ResultCodes
 import com.example.covid19notification.Model.Symptom
 import com.example.covid19notification.Model.User
 import com.example.covid19notification.R
-import com.example.covid19notification.ui.accountregistration.AccountRegistration
 
-private lateinit var btnAddSymptomEntry: ImageButton
-private lateinit var userid: String;
 class SymptomTracker : AppCompatActivity(), View.OnClickListener {
     private var TAG = "SymptomTrackerActivity"
-
     private var mSymptomEntries: ArrayList<Symptom> = ArrayList()
+    private var ids: ArrayList<String> = ArrayList()
+    private lateinit var btnAddSymptomEntry: ImageButton
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var user: User
+    private lateinit var symptoms: HashMap<String, Any>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,81 +29,65 @@ class SymptomTracker : AppCompatActivity(), View.OnClickListener {
         Log.d(TAG, "Symptom Tracker On Create")
         btnAddSymptomEntry = findViewById(R.id.addSymptomEntry)
         btnAddSymptomEntry.setOnClickListener(this)
+        recyclerView = findViewById(R.id.recycler_view)
+        user = intent.getSerializableExtra("user") as User
+        symptoms = intent.getSerializableExtra("symptoms") as HashMap<String, Any>
         initSymptomEntries()
     }
 
     private fun initSymptomEntries(){
         Log.d(TAG, "initSymptomEntries: Preparing Symptom Entries")
-
-        //TODO: Get entries from DB
-
-        Symptoms.getAllSymptomEntries().addOnSuccessListener({entries ->
-Log.d("initEntries: ", "INIT ENTRIES = ${entries}")        })
-
-        /*
-        //enable/uncomment this if you want to see the recyclerview working right away
-
-        var symptoms: ArrayList<String> = arrayListOf<String>("symptom 1", "symptom 2")
-        mSymptomEntries.add(Symptom("Date 1", symptoms ))
-
-        symptoms = arrayListOf<String>("symptom 1, symptom 3, symptom 4, symptom 6, symptom 5, symptom 7")
-        mSymptomEntries.add(Symptom("Date 2", symptoms ))
-
-        symptoms = arrayListOf<String>("symptom 3, symptom 5, symptom 6")
-        mSymptomEntries.add(Symptom("Date 3", symptoms ))
-
-        symptoms = arrayListOf<String>("Symptoms for Entry 4")
-        mSymptomEntries.add(Symptom("Date 4", symptoms ))
-        symptoms = arrayListOf<String>("Symptoms for Entry 5")
-        mSymptomEntries.add(Symptom("Date 5", symptoms ))
-        symptoms = arrayListOf<String>("Symptoms for Entry 6")
-        mSymptomEntries.add(Symptom("Date 6", symptoms ))
-        symptoms = arrayListOf<String>("Symptoms for Entry 7")
-        mSymptomEntries.add(Symptom("Date 7", symptoms ))
-        symptoms = arrayListOf<String>("Symptoms for Entry 8")
-        mSymptomEntries.add(Symptom("Date 8", symptoms ))
-        symptoms = arrayListOf<String>("Symptoms for Entry 9")
-        mSymptomEntries.add(Symptom("Date 9", symptoms ))
-        symptoms = arrayListOf<String>("Symptoms for Entry 10")
-        mSymptomEntries.add(Symptom("Date 10", symptoms ))
-        symptoms = arrayListOf<String>("Symptoms for Entry 11")
-        mSymptomEntries.add(Symptom("Date 11", symptoms ))
-*/
+        symptoms.forEach {(key, value) ->
+            val innerMap = value as HashMap<String, String>
+            val date = innerMap.get("date") as String
+            val text = innerMap.get("text") as String
+            val symptom = Symptom(date, text)
+            mSymptomEntries.add(symptom)
+            ids.add(key)
+        }
         initRecyclerView()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1) {
+            if (data != null) {
+                if (data.hasExtra("id")) {
+                    val id = data!!.getSerializableExtra("id") as String
+                    if (data.hasExtra("map") && resultCode == ResultCodes.UPDATE) {
+                        val symptom = data!!.getSerializableExtra("map") as Map<String, Any>
+                        symptoms.putAll(symptom)
+                    } else if (resultCode == ResultCodes.DELETE) {
+                        val symptom = symptoms.remove(id)
+                        Log.d("REMOVING SYMPTOM", "Symptom id to remove: $id, $symptom")
+                    }
+                    mSymptomEntries = ArrayList()
+                    ids = ArrayList()
+                    initSymptomEntries()
+                }
+            }
+        }
     }
 
 
     private fun initRecyclerView(){
         Log.d(TAG, "initRecyclerView start")
-        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
-        val adapter = SymptomAdapter(this, mSymptomEntries)
+        val adapter = SymptomAdapter(this, mSymptomEntries, ids, user)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
     }
 
+    private fun launchAddSymptomEntry() {
+        val intent = Intent(this.applicationContext, SymptomDetails::class.java)
+        intent.putExtra("user", user)
+        startActivityForResult(intent, 1)
 
-
-    //TODO: Change this to a 'get things from the DB using the UID'
-    private fun generateDummyList(size: Int):List<Symptom>{
-        val list = ArrayList<Symptom>()
-
-        for(i in 0 until size) {
-           // val item = Symptom("$i", "DD/MM/YYYY", "the list of all of the things")
-           // list +=item
-        }
-        return list
     }
-
     override fun onClick(v: View?) {
         val activity = this
         if (v != null) {
             when (v.id) {
-                R.id.addSymptomEntry -> startActivity(
-                    Intent(
-                        activity.applicationContext,
-                        SymptomDetails::class.java
-                    )
-                )
+                R.id.addSymptomEntry -> launchAddSymptomEntry()
             }
         }
     }

@@ -1,6 +1,7 @@
 package com.example.covid19notification.Database
 
 import com.example.covid19notification.Model.Symptom
+import com.example.covid19notification.Model.User
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
@@ -10,28 +11,23 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class Symptoms {
     companion object {
-        private val auth = FirebaseAuth.getInstance()
-        private val COLLECTION_NAME = "users"
-        private val db_users = FirebaseFirestore.getInstance().collection("users")
+        private val COLLECTION_NAME = "symptoms"
+        private val db = FirebaseFirestore.getInstance().collection(COLLECTION_NAME)
 
-        fun add(symptom: Symptom): Task<Void> {
-            val userid = auth.currentUser!!.uid
-          return FirebaseFirestore.getInstance().collection("users").document(userid).update("SymptomEntries.${symptom.date}", symptom.symptoms)
-
-        }
-        fun getSymptomsForDate(symptom: Symptom): Task<DocumentSnapshot> {
-            val userid = auth.currentUser!!.uid
-            return FirebaseFirestore.getInstance().collection("users").document("${userid}.SymptomEntries.${symptom.date}").get()
+        fun add(user: User,id: String, symptoms: HashMap<String, Any>): Task<Void> {
+            return db.document(user.id).update(symptoms)
         }
 
-        fun getAllSymptomEntries(): Task<DocumentSnapshot>{
-            val userid = auth.currentUser!!.uid
-            return FirebaseFirestore.getInstance().collection("users").document("${userid}.SymptomEntries").get()
+        fun update(user: User, symptoms: HashMap<String, Any>): Task<Void> {
+            return db.document(user.id).update(symptoms)
         }
 
-        fun delete(symptom: Symptom): Task<Void> {
-            val userid = auth.currentUser!!.uid
-            return FirebaseFirestore.getInstance().collection("users").document(userid).update("SymptomEntries.${symptom.date}", FieldValue.arrayRemove(symptom.symptoms))
+        fun delete(user: User, id: String): Task<Void> {
+            return db.document("${user.id}").update("$id", FieldValue.delete())
+        }
+
+        fun getSymptoms(user: User): Task<DocumentSnapshot> {
+            return db.document(user.id).get()
         }
     }
 }
